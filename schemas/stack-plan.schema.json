@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JARVIS preview plan v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "kind",
+    "mode",
+    "skills",
+    "adapters",
+    "mcp",
+    "devhub",
+    "executionPolicy",
+    "secretsIncluded"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "jarvis.deployment-plan"
+    },
+    "mode": {
+      "const": "preview"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "capabilityConflicts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "adapters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "connected"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "const": "planned"
+          },
+          "connected": {
+            "const": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "mcp": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "installed"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "installed": {
+            "const": false
+          }
+        }
+      }
+    },
+    "devhub": {
+      "type": "object",
+      "required": [
+        "endpoint",
+        "status"
+      ],
+      "properties": {
+        "endpoint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "const": "contract-not-connected"
+        }
+      }
+    },
+    "executionPolicy": {
+      "type": "object",
+      "required": [
+        "maxRetries",
+        "timeoutSeconds",
+        "maxDelegationDepth",
+        "automaticInstall",
+        "publicationRequiresAuthorization"
+      ],
+      "properties": {
+        "maxRetries": {
+          "const": 2
+        },
+        "timeoutSeconds": {
+          "const": 600
+        },
+        "maxDelegationDepth": {
+          "const": 1
+        },
+        "automaticInstall": {
+          "const": false
+        },
+        "publicationRequiresAuthorization": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "secretsIncluded": {
+      "const": false
+    }
+  },
+  "additionalProperties": false
+}
