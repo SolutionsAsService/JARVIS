@@ -1,6 +1,6 @@
 # JARVIS
 
-**One home for an intelligent assistant stack.** A SolutionsAsService project unifying OpenClaw orchestration, gm workflow policy, optional Freddie execution, MCP tools and a capability-aware skill registry.
+**One ubiquitous intelligent assistant — through codebase unification.** A SolutionsAsService project planning a single JARVIS monorepo/kernel that consolidates reusable OpenClaw and Freddie services, gm workflow policy, Paperclip governance, model routing and first-class MCP capabilities. The unified backend is **not implemented**; the current release is the functional Phase 0 frontend.
 
 ## What ships today
 
@@ -24,7 +24,7 @@ Node **24.15+** (Node 24 LTS).
 
 Open the local URL printed by Vite. Build: npm run build. Serve output: npm run preview. Deploy the contents of **dist/**, not the source directory. Hash-based navigation and relative assets support a static host and subpaths.
 
-[Deployment / Shadw](docs/DEPLOYMENT.md) · [Architecture and delivery plan](docs/PLAN.md) · [Integration contracts](docs/CONTRACTS.md)
+[Deployment / Shadw](docs/DEPLOYMENT.md) · [Codebase unification plan](docs/PLAN.md) · [Proposed context/kernel contracts](docs/CONTRACTS.md) · [Pinned primary-source evidence](docs/SOURCES.md)
 
 ## Verify
 
@@ -44,6 +44,10 @@ The prototype does not scan/delete installed skills, run commands, modify Gatewa
 
 ## Existing solutions and boundaries
 
-Reuse OpenClaw for durable orchestration rather than replacing it. Keep gm as a workflow, not a nested orchestrator. Use Freddie through a pinned adapter rather than booting another task owner. MCP is a tool transport, not an installer permission bypass. The existing gmfreddie combination is relevant upstream precedent, but does not itself supply the unified registry, contracts and lifecycle boundaries planned here. See the plan for source references and integration gates.
+The end-state is **consolidated reusable code and in-process services**, not a permanent control plane over independent assistant runtimes. Proposed canonical owner: JARVIS kernel scheduler/execution supervisor, initially using an OpenClaw-derived reusable agent core. Select Freddie service/provider primitives without booting its second agent loop; extract Paperclip goals/work queues/approvals/cost governance without its parallel heartbeat dispatcher. gm remains bounded workflow policy. Compatibility shells are temporary migration aids, not the product.
 
-No upstream engines or skills are vendored or relicensed in this first release. Their names and trademarks belong to their respective owners. JARVIS code: MIT, SolutionsAsService.
+Model routing (agentic-router-derived candidate) is distinct from capability-aware skill routing. Proposed JARVIS Context Protocol (JCP draft 0.1) is a tentative internal contract, **not an existing standard or replacement for MCP**. MCP servers retain their standard protocols and gain first-class catalog, auth, permissions, lifecycle and approval-backed installation planning. No automatic installation is assumed.
+
+**Planning only for now:** these published documents do not perform a code merger or runtime/service/config installation. DevHub and deployment contracts remain unknown. Phase 0 exports, sample data and disconnected states remain unchanged.
+
+No upstream engines or skills are vendored or relicensed in this first release. Their names, copyright and trademarks remain their owners’ property. Original JARVIS code is MIT; future imported modules retain their own licenses/notices. In particular, the inspected agentic-router source is **Elastic License 2.0, not MIT**; code/artifact reuse and hosted deployment require a separate license decision. See the source matrix and incremental acceptance gates before implementation.

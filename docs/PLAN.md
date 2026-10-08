@@ -1,90 +1,103 @@
-# JARVIS implementation plan
+# JARVIS codebase unification plan
 
-Status: **Phase 0 frontend foundation implemented; backend phases not implemented.** Date: 2026-10-07.
+Status: **PLANNING ONLY. Phase 0 frontend foundation implemented; unified backend/kernel not implemented.** Updated 2026-10-07.
 
-## Product contract
+## Task contract and correction
 
-One repo, one front door, one durable task owner. A user brings a project and outcome; JARVIS chooses explicit capabilities, retains ownership through execution, verifies outcomes and returns a terminal result. It does not keep spawning helpers or reopening completed work.
+The ultimate target is **unifying reusable codebases into one ubiquitous intelligent assistant tool**, not a dashboard/control plane permanently coordinating independent OpenClaw, Freddie, Paperclip and router deployments. One JARVIS monorepo, shared kernel and product lifecycle must own identity, work, context and execution. This replaces the earlier adapter-only end-state; temporary compatibility shells are migration tools, not the final product.
 
-Scope now: a deployable frontend and concrete unification plan. Not now: repackaging OpenClaw/Freddie into a monolith, running unreviewed MCP installers, migrating/deleting user skills, changing the host Gateway, or claiming DevHub compatibility without its contract.
+This turn changes planning documentation only. Preserve the functional frontend, export schema, tests, deployment artifacts and all user work. No runtime merger, package installation, service/config changes or skill creation/migration is authorized. The planning draft was initially local-only; the user subsequently authorized publishing these documentation changes to main on October 7, 2026. Acceptance: coherent PLAN/CONTRACTS/README; pinned primary-source ledger; explicit ownership and migration gates; documentation diff and unchanged runtime paths.
 
-## Architecture
+## Phase 0 — historical shipped truth
 
-Browser → authenticated control-plane API → durable task registry / event log → one selected execution adapter → permitted tools. A capability registry resolves skill ownership before dispatch. Backend secret references never cross into browser configuration.
+Existing responsive frontend: six views, seeded sample skill registry, reversible overlap planning, MCP install proposals, local task-state demonstration, browser persistence and portable preview export. Task Lab does not launch agents/subprocesses; engine and DevHub connections remain planned. Existing test/build/browser evidence remains in VERIFICATION.md; this documentation update does not upgrade that evidence or claim a backend exists. Keep Phase 0 behavior compatible while implementation is separately authorized.
 
-- **OpenClaw:** preferred session/orchestration boundary. Reuse documented APIs and existing permission gates; do not invent them.
-- **gm:** bounded workflow policy (inspect/change/verify/finish), not a second scheduler or a runtime requirement.
-- **Freddie:** optional plugin execution adapter, version-pinned and conformance-tested. Never simultaneous ownership of the same task as OpenClaw.
-- **MCP:** server/tool protocol adapter with package provenance, reviewed transport, explicit install consent, bounded calls and scoped secrets.
-- **DevHub:** project context and result delivery adapter. Endpoint, authentication, tenant model and schema are unknown until agreed.
+## Proposed end-state: one kernel, multiple surfaces
 
-One repository initially contains frontend, portable domain logic, adapter contracts, schemas and docs. Add backend/packages only when their implementation gates are met; no empty package forest.
+Browser / CLI / chat / device surfaces → authenticated ingress → **JARVIS kernel** → in-process capability services → scoped tools, model providers and external MCP servers. Ubiquity means shared identity and state across surfaces, not an unrestricted ambient assistant on every device.
 
-## Phase 0 — show the system (delivered)
+Logical future monorepo boundaries (not empty directories to create now):
 
-Responsive frontend; truthful disconnected states; reversible sample capability planning; finite-retry local state machine; nonsecret config export; build, unit tests and authored desktop/mobile E2E suite.
+- **kernel:** canonical identity, tenant/workspace/task/run state, event ledger, scheduler, execution leases, deadlines, cancellation, process ownership and recovery.
+- **context:** selective context assembly, memory lifecycle, artifact access, trust labels, provenance and token accounting; proposed JARVIS Context Protocol in CONTRACTS.md.
+- **capabilities:** one catalog for tools, skills, service providers and MCP descriptors; separate skill and model routers.
+- **governance:** Paperclip-derived goals, work queues, roles, approvals, cost reservations/accounting and audit views; these call kernel APIs, not their own dispatcher.
+- **execution:** one embedded agent loop based initially on reusable OpenClaw agent-core boundaries; selectively extract Freddie service/provider and lifecycle primitives where they win conformance tests. Plugin effects cannot grant authority or start hidden task loops.
+- **mcp:** first-class MCP client/catalog/lifecycle, using actual negotiated MCP semantics, not a competing protocol.
+- **surfaces and compatibility:** retain current frontend; later normalize old session/tool interfaces temporarily. Remove duplicated runtime boot paths after migration gates.
 
-Exit: clean build and unit tests; inspect actual browser interactions when browser policy permits; explicitly disclose any verification limit. This is a prototype, not live agent orchestration.
+Most domain services are in-process modules using shared versioned contracts. Sandboxed tool processes, native helpers, remote devices and third-party MCP servers may remain out-of-process for isolation; they are kernel-owned capabilities, not independent assistant schedulers. Language boundaries do not justify a second assistant runtime. No mandated deployment/database choice before target and upstream transaction needs are settled.
 
-## Phase 1 — real task ownership
+## Source reuse and overlap resolution
 
-Implement authenticated backend with SQLite for a single-node start and versioned migrations. Task identity includes project, actor, capability manifest hash, consent scope, adapter and idempotency key. Persist events before acknowledging acceptance. Stream updates with bounded reconnect/backoff, not repeated transcript inspection.
+Evidence references below resolve to SOURCES.md, which distinguishes source inspection from execution proof.
 
-Task lifecycle: queued → inspecting → changing → verifying → succeeded, or blocked/cancelled/failed/timed_out. A completed task cannot reopen without a new explicitly linked task. A retry preserves identity and increments a finite budget. No retry after an uncertain external mutation before reconciling effects.
+- **OpenClaw [O]:** reuse documented agent-core/runtime, model transport, session/tool policy and channel/device boundaries. Proposed extraction is into JARVIS-owned packages; do not make unsupported imports from a separately installed Gateway's private internals the product architecture. Installed docs are evidence, not proof the source extraction compiles.
+- **Freddie [F]:** reuse candidate scoped service definitions/providers, reversible lifecycle effects, reconstructable model-context/session-event ideas and subprocess teardown seam. Its default agent loop, teams, session ownership and boot tree overlap OpenClaw and kernel ownership; do not boot the full Freddie harness inside an OpenClaw agent turn. Preserve distinction between durable session facts and live agent events. The reviewed HTTP carrier lacks TLS/auth/origin policy and is not the public JARVIS API.
+- **gm [G]:** bounded inspect/change/verify/finish workflow as policy and evaluation criteria, not another scheduler, required daemon or automatic recursive follow-up. Preserve original AnEntrypoint attribution plus fork adaptation credit.
+- **Paperclip [P]:** derive governance, goal/work queue models, organization roles, approvals and cost reservation/accounting behavior. Its heartbeat dispatch, native/legacy execution and continuation machinery overlap task/run ownership. Extract selected domain services and tests; do not import heartbeat.ts wholesale or keep Paperclip heartbeats dispatching alongside JARVIS. The budget code explicitly notes reservations constrain admission but cannot cap an upstream provider bill.
+- **agentic-router [R]:** distinct model-routing design/code candidate, not a skill router or work scheduler. Go request/decision contracts and hard eligibility/translation constraints, cluster strategy, catalog and explainable policy provenance are useful. **ELv2, not MIT:** extraction, porting and artifact redistribution are license-gated; a hosted/managed target requires an explicit licensing review/permission decision before reuse. A renamed TypeScript port does not remove obligations. A temporary Go policy worker may be kernel-owned; preferred final shape is an approved reusable library/in-process binding or independently authored replacement, never an independent assistant loop.
 
-Each process has task owner, handle, deadline, attempt and cancellation signal. A watchdog must enforce deadlines independent of the browser. No missing-file-as-liveness assumption. Supervise child process groups, drain output within limits, handle termination escalation, and preserve checkpoints after restart. Max delegation depth initially 1; max concurrent workers configurable and bounded. No silent second executor. A timeout must produce a terminal event, not an infinite continuation.
+### Canonical ownership decision (proposed)
 
-Acceptance: kill/restart mid-task, lost acknowledgement, duplicate submission, stalled process, unavailable worker and cancellation tests all reach one truthful terminal disposition; no orphan process; no duplicated mutation; no retry storm.
+**ONE canonical scheduler: JARVIS kernel durable scheduler. ONE execution owner: JARVIS kernel execution supervisor. ONE embedded agent loop per run: OpenClaw-derived reusable core initially.** Governance emits work requests; routers emit decisions; skills emit guidance; none can self-schedule, launch a second harness, or bypass kernel tool authorization. Freddie loop/team schedulers and Paperclip heartbeat/native runner dispatch are retired from the consolidated boot graph, not layered underneath it.
 
-## Phase 2 — adapters, not duplicate harnesses
+Scheduler owns atomic admission, dependency-ready queues, finite retry budgets, fairness and capacity. Supervisor owns exact run/attempt/lease epoch, model dispatch and every process/worker handle. A worker is a bounded executor, never another authoritative task registry. Persist intent/accepted custody before acknowledgement; use fencing to prevent two owners after reconnect. Child work uses linked canonical tasks and decremented budgets (initial delegation depth 1), not opaque recursive spawning.
 
-Preserve native session keys, exact run IDs, submission identities, approval state and transcript cursors. Reconnect must reconcile accepted, persisted and completed states instead of blindly replaying. Cancellation requires reconciliation of owned process trees; a cancelled agent turn alone does not prove every child process stopped. Never kill shared/user-owned processes.
+Lifecycle: queued → inspecting → changing → verifying → succeeded; permitted exits blocked/failed/cancelled/timed_out. Approval waiting and execution substates are explicit events. Terminal tasks never silently reopen; follow-up requires a new linked task. Cancellation is a request until owned work stops/reconciles; release physical resource leases only with cleanup evidence. Uncertain external mutation enters reconciliation, not blind replay or success. A cancellation/timeout may terminalize the task while separately retaining a quarantined cleanup lease; expose that distinction truthfully.
 
-Implement OpenClaw first against a pinned supported version; prove a real read-only operation, then a scoped write with permission checks. Implement Freddie only after mapping its plugin lifecycle, context and cancellation semantics. Use the same canonical task id and normalized result envelope across adapters. gm policies never supersede host permissions.
+## Context, memory and provenance
 
-The reviewed Freddie HTTP carrier has no built-in TLS, authentication or origin policy. Keep it loopback-only behind the authenticated JARVIS backend; never expose that carrier directly as the public API. Its live-agent events and durable session events are distinct. Preserve that distinction in the event adapter.
+Adopt the tentative **JARVIS Context Protocol (JCP), draft 0.1**, only as JARVIS internal versioned contracts and interoperability mappings. It is not an existing standard and does not replace MCP. CONTRACTS.md defines envelope, identity, authority, budget/deadline, trust, provenance, lifecycle and replay rules.
 
-MCP installation flow: discover → inspect package/commit/digest/license and scripts → propose exact scoped changes → approval → transactional install → health check → receipt/rollback. Refuse mutable unknown versions by default. Package scripts are code. Do not combine installation approval with arbitrary later tool access. Inspect existing configuration and merge, never replace host config wholesale. Credentials are backend SecretRefs with tenant scoping. Network discovery needs SSRF protection and bounded payloads. No automatic global installers or remote skill replacement.
+Every model request is reproducible from an access-controlled context manifest: governing instructions, selected skill revisions/dependencies, allowed tool schema hashes, task state, retrieval evidence and summaries with source links. Do not concatenate all installed catalogs or all tenants' memories. Tenant boundaries apply to retrieval, caching, artifacts, route telemetry and export. Evidence text is data, never elevated instructions. Summaries retain derivation and uncertainty; no silent promotion into stable user directives. Secrets remain scoped backend references; model/browser exposure requires a specific justified capability, not general context sharing.
 
-Acceptance: each adapter proves cancellation, permission-denied propagation, deadlines and structured evidence. A disconnected adapter cannot return success. Compatibility matrix pins versions and records tested capabilities.
+## Two distinct routers
 
-## Phase 3 — one skill registry
+### Model router — agentic-router-derived candidate [R]
 
-Import manifests read-only. Federate runtime + workspace/scope + resolved name as installation identity, preserving each runtime’s precedence rules. Do not concatenate both runtime catalogs into a single prompt. Store stable identity, source, revision/hash, license, capabilities, dependencies, triggers, privilege requirements and tested compatibility. Exact-content duplicates and capability overlaps are different findings; similar names alone are not enough to merge skills.
+Input: authorized model/provider catalog snapshot, modality/tool/structured-output/translation needs, context footprint, budget, deadline, explicit operator pin and approved routing policy/artifact revision. Filter physical compatibility and policy permissions **before** quality/cost/latency ranking. Output: model+provider+runtime compatibility binding, reason, candidate exclusions, policy hash and estimated cost; dispatcher rechecks authorization and reserves budget. Context assembly and routing iterate boundedly if window size changes; no endless model/context oscillation.
 
-Choose one owner per exclusive capability in a project policy. Show conflicts, reasons and alternatives. Proposed migration lists retained behavior, removed triggers, backups and rollback. User approval required before changing installed skills. Keep upstream attribution and customized local edits. Never silently overwrite a fork with upstream prose. Lint circular routing, recursive skill calls, exhaustive scope expansion and mandatory subprocess loops; runtime enforcement still lives in Phase 1.
+Per-action routing must preserve conversation/tool-call/reasoning semantics, not silently translate unsupported unions. Decide permitted switching checkpoints and retain sticky routes where replay compatibility requires it. Approved fallback is bounded and recorded; no eligible route means blocked, not policy bypass. Upstream policy-sidecar docs explicitly reject hidden strategy fallback: JARVIS fallback is a separate, visible proposed policy, not a claim about upstream behavior. Test against fixed-model baselines, provider failures, unknown prices, oversized context and incompatible tool/history formats. README superlatives and mocked scorer tests are not independently verified performance benchmarks.
 
-Acceptance: fixtures include same-name different-behavior, renamed duplicates, overlapping partial capabilities, differing licenses, local modifications and dependency cycles. Migration preview is side-effect-free; rollback restores exact prior state.
+### Skill router — JARVIS capability selection
 
-## Phase 4 — DevHub handoff
+Skill identity includes source/runtime lineage, tenant visibility, workspace scope, logical name, revision/content hash and local customization, separate from capability identity. Permission, platform and license compatibility filters run before semantic suitability ranking. Use task intent, declared capabilities, tested triggers and behavior metadata, not name similarity alone. Preserve upstream precedence when importing; no silent overwrite of local forks.
 
-Obtain actual DevHub repository/API and auth requirements. Agree on project id, task requests, attachment/evidence references, tenant identity and result acknowledgement. Define retry-safe submission and correlation. Host JARVIS under an allowed origin or subpath; agree frame/SSO policy, never wildcard credentialed CORS.
+Resolve dependency closure with cycle/unsatisfied-dependency checks, exact-content dedupe versus partial-capability overlaps, exclusive capability conflicts and context-token limits. Selection order: explicit authorized user/project pin; required capability coverage; tested semantic score; scope precedence; stable identity/revision lexical tie-break. If closure cannot fit, show omissions or block/request narrowing rather than silently dropping required dependencies. Return selected/rejected IDs, versions, reasons, conflicts, closure and token estimate. Deferred bodies load selectively; instructions cannot raise permission.
 
-Acceptance: real DevHub request → one task → authorized adapter → real verification → acknowledged result. Retry a dropped response without duplicate execution. Test isolation across users/projects.
+Evaluation: same-name different behavior, renamed duplicates, partial overlaps, hostile instructions, differing licenses, dependency cycles, deterministic ties and isolation. Use labeled replay fixtures plus real tasks when authorized; poor-confidence/failed evaluation falls back to a small explicit approved shortlist or asks the user, never generates executable SKILL.md or auto-installs skills. Migration/deduplication remains an approval-backed proposal with backup and rollback.
 
-## Phase 5 — release hardening
+## MCP is first-class, not an installation checkbox
 
-Audit logging with redaction, retention policy, resource/concurrency limits, migrations/backups, dependency/license checks, security tests, accessibility and observability. Add load/chaos benchmarks; never claim measured speedups without comparable recorded data. Pin reproducible images and establish rollback before release.
+Catalog server identity/source/license/pin, configured endpoint and transport, negotiated protocol version, auth binding, discovered tools/resources/prompts, schema hashes, visibility, health and provenance. Support standard stdio and Streamable HTTP; legacy SSE only with explicitly tested compatibility. Lifecycle owns start/connect/initialize/discovery/refresh/drain/disconnect and bounded retries. Pin package/commit/container digest independently from protocol negotiation; schema drift invalidates cached grants/selection as policy requires.
 
-## Risks and decisions
+Per-tool authorization is checked with tenant/requester identity and arguments at dispatch. Server auth (OAuth where applicable or scoped secret refs) is not blanket tool consent. Bound startup/request/idle timeouts, payloads, concurrency and output retention; SSRF/redirect checks and transport origin/TLS policy apply. Kernel supervises only JARVIS-owned stdio processes, never shared/user servers. Distinguish configured, reachable, healthy, authorized and invocation success. Record original MCP call ID, server/tool pin and source trust in JCP provenance without changing MCP wire meanings.
 
-- Duplicate orchestration: resolved by ownership contract, not a merged README.
-- A skill may instruct infinite work: enforce task budgets and terminal states in runtime.
-- DevHub contract unknown: do not fake a compatible endpoint.
-- Freddie developer preview changes: pin and gate adapter upgrades.
-- Shadw target/account unknown: provide static artifact and platform-neutral serving; user deploys.
-- Existing solution preflight: OpenClaw already orchestrates, gm already supplies policy, Freddie/gmfreddie already combine plugin execution. Reuse these; JARVIS adds a unifying control-plane contract.
+Installation remains planning until explicitly approved: discover → inspect exact source/digest/license/scripts and permission needs → propose scope/config diff/cost/rollback → approval bound to proposal hash → isolated/transactional install → health/conformance probe → receipt or rollback. Installing does not approve all future calls. Inspect/merge existing config; no auto-install assumption or global installer/remote skill replacement.
 
-## Source ledger
+## Incremental extract/replace roadmap and gates
 
-Inspected 2026-10-07: SolutionsAsService/gm skill and installer; SolutionsAsService/freddie README (developer preview, plugin architecture); SolutionsAsService/gmfreddie README (preloaded Freddie + gm-cc). These are integration inputs, not a compatibility guarantee. OpenClaw and MCP primary docs must be checked against pinned runtime versions during adapter implementation.
+1. **Planning baseline (now):** approve architecture/ownership, review source/license matrix, obtain DevHub/deployment contracts. Gate: docs coherent and frontend truth preserved; no runtime mutation.
+2. **Inventory and extraction design:** authorized read-only module/dependency inventory, per-file licenses/notices, test surfaces and native/language constraints. Select exact extraction candidates, identity/storage mappings and bounded APIs; do not bulk-vendor four products. Gate: maintainers/owners and patch provenance assigned; legal decision for [R]; baseline tests captured.
+3. **Kernel contract vertical slice:** implement identity/event log/idempotency/lease supervisor/context manifest behind current frontend without booting upstream full runtimes. Database decision must account for Paperclip PostgreSQL transaction assumptions; SQLite is an option only after explicit redesign/conformance. Gate: duplicate submission, restart, stale lease, deadline, cancellation, tenant isolation, permissions and retained cleanup evidence; one terminal result, no orphan/duplicated mutation.
+4. **Extract reusable execution/context services:** land OpenClaw-derived core and selected Freddie providers one at a time with original tests plus JARVIS conformance. Temporary shell maps exact native session/run IDs and event cursors; only one executor per task. Shadow mode is read-only normalization/decision comparison, never duplicate writes. Gate: reconstructable requests, tool policy denial, process-tree cleanup and replay; disable old loop/dispatch for migrated tasks.
+5. **Consolidate governance and routing:** map Paperclip company→tenant, project→workspace and issue→task with explicit migration tables; preserve original IDs as provenance. Extract goals/approvals/cost services onto kernel state and retire heartbeat/native runner admission. Introduce separately evaluated model and skill routers; full MCP catalog/lifecycle with install preview only by default. Gate: costs conserved without double billing, goal/work dependencies correct, explainable routing, no hidden scheduler/fallback, authorization unchanged.
+6. **Migrate and remove compatibility shells:** approved backups, checkpoints, paused admission, reconciliation, ID/event/artifact migration, ownership transfer with fencing, one route active at a time. Rollback restores data/config and original owner before resuming; never dual-write execution. Gate: loss/duplication/restart tests and measured acceptance; remove redundant boot paths, databases and scheduler timers only with explicit authorization. Final product runs consolidated code/services, not permanently federated engines.
+7. **Ubiquitous surfaces and release:** DevHub plus agreed chat/device deployment, auth and result receipts; retention/redaction, observability, accessibility, migrations/backups, license/SBOM and threat review. Gate: real task→verified result→acknowledgement, isolation and rollback; representative controlled quality/cost/p50/p95 latency evaluation with immutable inputs/revisions. No claimed speedup without recorded comparable measurements.
 
-- https://github.com/SolutionsAsService/gm
-- https://github.com/SolutionsAsService/freddie
-- https://github.com/SolutionsAsService/gmfreddie
-- https://docs.openclaw.ai/gateway
-- https://modelcontextprotocol.io/specification
+## Code ownership and license preservation
 
-Independent contract review pinned Freddie at 5b300a13499fb74db55ec5aedfc3989a24fb29a8 and gm at d3099593736e725266e6fad07ff02df8d2e882ae. Reviewed Freddie docs/architecture.md, docs/subsystems/skills.md, docs/subsystems/subprocess.md and docs/subsystems/web-server.md, plus installed OpenClaw gateway/protocol/rpc-session-control.md, gateway/background-process.md and tools/skills.md. Reverify against deployment versions.
+JARVIS owns canonical contracts, kernel scheduling/supervision and integration changes. Upstream authors retain their original code ownership/copyright. Each extraction records repository, immutable revision, original path/hash, license, modifications, responsible maintainer and test provenance. Keep original notices plus third-party/transitive notices and mark modifications; JARVIS root MIT is not a blanket relicense. gm preserves AnEntrypoint MIT and Pimp My Skill · SolutionsAsService · https://github.com/SolutionsAsService adaptation credit. Freddie preserves DeepSeek MIT; OpenClaw preserves Foundation MIT/third-party notices; Paperclip preserves Paperclip AI MIT. Router ELv2 and model/embedding artifact licenses are separately gated. No upstream implementation is copied this turn.
 
-No upstream implementation is copied into this release. Preserve original licenses and provenance when future adapters vendor any upstream code or skill text.
+## Unresolved decisions and risks
+
+- DevHub repository/version, auth, tenant mapping, event/result acknowledgement and evidence contract are unknown. No compatible endpoint is invented.
+- Deployment target remains unknown: local/private versus third-party hosted, WSL/Windows/cloud/devices, public origin/subpath/SSO and Shadw account. This directly affects [R] licensing, transport and process ownership.
+- Confirm source-level OpenClaw pin and actual package exports before extraction; installed version/docs are not a Git commit or execution benchmark.
+- Choose data store/migration semantics after governance extraction inventory; do not pretend PostgreSQL row locks transplant unchanged into SQLite.
+- Decide router reuse license clearance, Go in-process binding/port versus independently authored replacement, allowed model-switch boundaries and evaluation set.
+- Confirm memory retention periods, redaction/legal hold policy, stable directive approval and organizational role model. Default deny/cross-tenant isolation until decided.
+- Proposed ownership is settled in this plan; module feasibility/performance/security still require implementation proof. Rapid Freddie evolution and very large Paperclip heartbeat coupling make bulk merges unsafe.
+
+Pinned primary-source claims and evidence paths: [SOURCES.md](SOURCES.md). Proposed envelopes and compatibility rules: [CONTRACTS.md](CONTRACTS.md).
