@@ -38,3 +38,7 @@ Serves built static files only, not the repo or a privileged installer. Containe
 ## Production hardening
 
 Hosting proxy should enforce HTTPS and security headers. The bundled static server has a CSP permitting optional Google Fonts and no cross-origin API connections. Add explicit API origins only with a reviewed integration. Never add live Gateway tokens or privileged device pairing to this public preview.
+
+## Local kernel (Phase 1a)
+
+See [KERNEL.md](KERNEL.md) for `npm run start:kernel`, mandatory backend-only session token, SQLite ownership, authenticated routes and explicit `?kernel=local` frontend. Existing static/Docker deployment remains a preview without an assistant backend. Do not expose the loopback kernel as a public service or inject its token into Vite, localStorage, an exported plan or static hosting. Public auth/TLS/DevHub/multi-device deployment is not implemented.

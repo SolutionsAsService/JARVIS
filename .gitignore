@@ -4,3 +4,6 @@ dist/
 !.env.example
 playwright-report/
 test-results/
+
+.source-cache/
+.jarvis/

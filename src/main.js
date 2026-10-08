@@ -1,4 +1,5 @@
 import './style.css';
+import './live-entry.js';
 import {integrations,skills,servers,milestones} from './catalog.js';
 import {initialState,conflicts,resolveTo,createRun,advanceRun,safeEndpoint,restoreState,exportPlan,phases} from './core.js';
 const storageKey='jarvis-preview-v1';

@@ -1,3 +1,5 @@
+> **Phase 1a executable subset:** see [KERNEL.md](KERNEL.md). Task IDs/events, scoped HTTP, inline admission checks and JCP/0.1 context manifests are implemented. Wider envelope/memory/schema-negotiation contracts below remain proposed; no published protocol standard or complete schema coverage is claimed.
+
 # Proposed kernel contracts — not live APIs
 
 Planning draft, 2026-10-07. These are intended **JARVIS** internal boundaries, not claims that OpenClaw, Freddie, Paperclip, MCP or DevHub expose these methods/types. Unified backend is not implemented. See PLAN.md for the single scheduler/execution owner and SOURCES.md for evidence.

@@ -1,3 +1,17 @@
+## Phase 1a implementation checkpoint — October 7, 2026
+
+- Parent took sole development ownership after the initial code checkpoint. Direct hardening added single-owner SQLite custody, live HTTP restart draining, actor-owned scheduling, persisted workflow/context routing, denial/duplicate-skill/budget checks and disconnect fencing.
+- `npm test`: **31/31 passed**, final command exit0 collected before publication. Includes original15, durable state/restart/cancel/lease/idempotency/auth/isolation/router/context/source-hash checks, actual MCP stdio child lifecycle, live frontend handlers and actual CLI restart+HTTP built assets.
+- `npm run test:kernel`: previous direct checkpoint14/14 passed, before additional CLI/disconnect tests.
+- Frontend production build passed; real HTTP API and assets exercised by kernel HTTP and actual CLI tests. Test servers/child processes/tempdatabases cleaned.
+- Local browser navigation remains policy-blocked; no local visual/browser pass claimed. Existing6 Chromium CI tests below are historical until a new run settles.
+- No real LLM inference, external MCP installation, public hosted deployment, container kernel build or full Freddie/Paperclip/OpenClaw agent-loop consolidation is claimed. Source extraction preserves upstreamMIT originals and ledger, complete upstream test suite not executed.
+- Native type-stripping emits an experimental warning on tested Node24.19.0; this is recorded, not hidden.
+
+---
+
+## Historical Phase 0 evidence (not proof of the new kernel)
+
 # Verification record
 
 2026-10-07, local Node 24.19.0.

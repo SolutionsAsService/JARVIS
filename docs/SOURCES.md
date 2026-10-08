@@ -48,3 +48,11 @@ Paperclip README's autonomous-team/business and feature descriptions are upstrea
 GitHub API metadata/tree and pinned raw source copies were saved only to temporary /tmp/jarvis-planning-evidence-20261007/<owner>__<repo>/ for this bounded review. Each index.json records repository, branch and SHA; evidence file paths match the matrix. Temporary copies are not vendored JARVIS dependencies and may expire. Use pinned GitHub paths to reproduce the inspection; do not rely on /tmp as durable provenance storage.
 
 JARVIS baseline at start: 7b34f17c67bd5253f3659d773475f7de38a65a0d; status output contained no dirty entries. No repository-local AGENTS.md found under JARVIS; workspace instructions and installed gm bounded workflow governed this docs-only task. Historical PLAN cited gmfreddie as integration precedent; it is not reverified or selected as a canonical unified runtime in this revision.
+
+## Phase 1a consolidation evidence
+
+OpenClaw extraction pin `1c4635feb0b2ce15702177597e01cd6962cc93f4`: exact `src/agents/glob-pattern.ts` and `src/shared/regexp.ts` retained with original MIT notice and hashes in `kernel/vendor/openclaw/ledger.json`. A local Node type-stripping import shim is independently authored. The matcher is used by actual capability admission, governance and skill routing. Conformance/hash tests run; the complete upstream test suite does not.
+
+Freddie subprocess-local source at the existing pin was inspected: it depends on node-pty, sibling process inspection/terminal readers and Freddie runtime services. It was not imported to avoid a second runtime or fake standalone extraction. Paperclip budget-reservations/budgets source at its existing pin requires Drizzle, shared/db package types, accounting transactions and PostgreSQL row-lock semantics; these are not copied into SQLite. `kernel/governance.js` is independently authored inspired-by policy, not a port of Paperclip accounting.
+
+`agentic-router` code/artifacts remain absent. `kernel/model-router.js` is an independently authored deterministic eligibility/cost baseline, not an ELv2 port or validated equivalent. The official MCP SDK is pinned in package-lock; external MCP installs and hosted integration remain unimplemented.

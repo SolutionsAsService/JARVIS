@@ -1,0 +1,5 @@
+import {fail,hash,authorize} from './common.js';
+// Independently authored, Paperclip-inspired domain contracts. No dispatcher or copied SQL.
+export function workApproval({goalId,workspace,capability,units=1},actor){if(!actor.workspaces.includes(workspace))fail('approval_denied','Work scope denied',403);try{authorize(actor,capability);}catch{fail('approval_denied','Work capability denied',403);}if(!Number.isSafeInteger(units)||units<0||units>100)fail('budget','Work budget exceeded');const receipt={goalId:goalId??null,workspace,capability,units,actorId:actor.id,tenant:actor.tenant,policy:'gm-bounded-v1'};return {...receipt,hash:hash(receipt)};}
+export function reserveBudget(limit,reserved,observed,request){if([limit,reserved,observed,request].some(n=>!Number.isSafeInteger(n)||n<0))fail('budget','Invalid budget');if(reserved+observed+request>limit)fail('budget','Admission budget exhausted',429);return {reserved:reserved+request,observed,limit};}
+export const workflow=Object.freeze(['inspecting','changing','verifying','succeeded']);

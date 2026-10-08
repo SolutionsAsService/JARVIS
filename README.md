@@ -1,3 +1,5 @@
+> **Implementation checkpoint — October 7, 2026:** Phase 1a now has a real consolidated local task kernel in `kernel/`, persistent SQLite tasks/events, one execution supervisor, bounded workflow/context routing, scoped authenticated HTTP and an opt-in frontend. This is not a full LLM agent runtime or complete merger. See [kernel implementation](docs/KERNEL.md). Earlier claims that no backend exists are superseded by this checkpoint.
+
 # JARVIS
 
 **One ubiquitous intelligent assistant — through codebase unification.** A SolutionsAsService project planning a single JARVIS monorepo/kernel that consolidates reusable OpenClaw and Freddie services, gm workflow policy, Paperclip governance, model routing and first-class MCP capabilities. The unified backend is **not implemented**; the current release is the functional Phase 0 frontend.

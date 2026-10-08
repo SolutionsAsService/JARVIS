@@ -1,12 +1,12 @@
 # JARVIS codebase unification plan
 
-Status: **PLANNING ONLY. Phase 0 frontend foundation implemented; unified backend/kernel not implemented.** Updated 2026-10-07.
+Status: **IMPLEMENTATION IN PROGRESS. Phase 0 frontend and Phase 1a bounded local kernel implemented; complete agent-core/codebase consolidation remains pending.** Updated 2026-10-07.
 
 ## Task contract and correction
 
 The ultimate target is **unifying reusable codebases into one ubiquitous intelligent assistant tool**, not a dashboard/control plane permanently coordinating independent OpenClaw, Freddie, Paperclip and router deployments. One JARVIS monorepo, shared kernel and product lifecycle must own identity, work, context and execution. This replaces the earlier adapter-only end-state; temporary compatibility shells are migration tools, not the final product.
 
-This turn changes planning documentation only. Preserve the functional frontend, export schema, tests, deployment artifacts and all user work. No runtime merger, package installation, service/config changes or skill creation/migration is authorized. The planning draft was initially local-only; the user subsequently authorized publishing these documentation changes to main on October 7, 2026. Acceptance: coherent PLAN/CONTRACTS/README; pinned primary-source ledger; explicit ownership and migration gates; documentation diff and unchanged runtime paths.
+Historical planning restriction superseded by the user’s October 7 authorization to build and publish a real consolidated kernel. Preserve the functional frontend and all user work; global runtime installations, paid inference and service/config changes are not implied. The planning draft was initially local-only; the user subsequently authorized publishing these documentation changes to main on October 7, 2026. Acceptance: coherent PLAN/CONTRACTS/README; pinned primary-source ledger; explicit ownership and migration gates; documentation diff and unchanged runtime paths.
 
 ## Phase 0 — historical shipped truth
 
@@ -101,3 +101,7 @@ JARVIS owns canonical contracts, kernel scheduling/supervision and integration c
 - Proposed ownership is settled in this plan; module feasibility/performance/security still require implementation proof. Rapid Freddie evolution and very large Paperclip heartbeat coupling make bulk merges unsafe.
 
 Pinned primary-source claims and evidence paths: [SOURCES.md](SOURCES.md). Proposed envelopes and compatibility rules: [CONTRACTS.md](CONTRACTS.md).
+
+## Phase 1a — implemented local kernel
+
+See [KERNEL.md](KERNEL.md) for actual executable APIs, source extraction, tests, deployment and limitations. Native SQLite task/event custody, single local owner, finite execution, independently authored workflow/governance modules, OpenClaw-derived capability matching, deterministic skill routing and scoped JCP manifests now form one codebase. The official MCP SDK talks to a real owned stdio fixture. Model routing remains an eligibility decision without inference. Freddie lifecycle extraction, full Paperclip goals/roles/billing/PostgreSQL migration, real LLM loop, external MCP installation/auth and multi-device DevHub ingress remain gated future phases.

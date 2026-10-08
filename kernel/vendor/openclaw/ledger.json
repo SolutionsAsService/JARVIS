@@ -1,0 +1,20 @@
+[
+  {
+    "repository": "https://github.com/openclaw/openclaw",
+    "revision": "1c4635feb0b2ce15702177597e01cd6962cc93f4",
+    "originalPath": "src/agents/glob-pattern.ts",
+    "sha256": "99025fa49fef4936c189cd3b5a8aab091c776d6d65d7ac35a5f53f07c5dfc8d6",
+    "localPath": "kernel/vendor/openclaw/glob-pattern.ts",
+    "license": "MIT",
+    "modifications": "Original unchanged; runtime import shim supplied separately"
+  },
+  {
+    "repository": "https://github.com/openclaw/openclaw",
+    "revision": "1c4635feb0b2ce15702177597e01cd6962cc93f4",
+    "originalPath": "src/shared/regexp.ts",
+    "sha256": "bafc7ca866952c3df452c25ca0c6ef30756ff2c9f44463ad76da30857aeab35e",
+    "localPath": "kernel/vendor/openclaw/regexp.ts",
+    "license": "MIT",
+    "modifications": "Original unchanged; runtime import shim supplied separately"
+  }
+]

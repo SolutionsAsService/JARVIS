@@ -1,15 +1,20 @@
 {
   "name": "jarvis-assistant-stack",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "A deployable control-plane preview for a unified intelligent assistant stack.",
+  "description": "JARVIS consolidated local kernel with a deployable static preview and authenticated opt-in task frontend.",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test test/*.test.js",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "start:kernel": "node kernel/http.js",
+    "start:static": "node server.mjs",
+    "test:kernel": "node --test test/kernel*.test.js test/router*.test.js test/mcp*.test.js test/upstream*.test.js test/hardening.test.js",
+    "pretest": "npm run build",
+    "pretest:kernel": "npm run build"
   },
   "engines": {
     "node": ">=24.15.0"
@@ -18,5 +23,8 @@
     "@playwright/test": "1.64.0",
     "jsdom": "30.1.2",
     "vite": "8.3.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1"
   }
 }
