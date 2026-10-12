@@ -89,7 +89,7 @@ export const components = Object.freeze([
 
   // Tools & MCP
   c({id: 'mcp-sdk', name: 'MCP TypeScript SDK', layer: 'tools', category: 'mcp', status: 'integrated', repo: 'https://github.com/modelcontextprotocol/typescript-sdk', license: 'MIT / Apache-2.0 (transition)', owner: 'Model Context Protocol project',
-    note: 'Pinned @modelcontextprotocol/sdk 1.32.1 drives a real stdio client lifecycle (initialize, list, schema-hash grant, call, cleanup).', real: ['stdio client with deadlines and cleanup evidence'], planned: ['Streamable HTTP + OAuth'], jarvisPaths: ['kernel/mcp.js'], links: ['fixture-mcp', 'autheo-mcp', 'gm-mcp', 'mcp-filesystem', 'github-mcp']}),
+    note: 'Pinned @modelcontextprotocol/sdk 1.32.1 drives a real stdio client lifecycle (initialize, list, schema-hash grant, call, cleanup).', real: ['stdio client with deadlines and cleanup evidence'], planned: ['Streamable HTTP + OAuth'], jarvisPaths: ['kernel/mcp.js'], links: ['fixture-mcp', 'autheo-mcp', 'gm-mcp', 'mcp-filesystem', 'github-mcp', 'unified-cad-mcp']}),
   c({id: 'fixture-mcp', name: 'JARVIS owned fixture MCP', layer: 'tools', category: 'mcp', status: 'integrated', repo: 'https://github.com/SolutionsAsService/JARVIS', license: 'MIT', owner: 'SolutionsAsService',
     note: 'A deterministic echo server owned by the kernel, used to prove the MCP lifecycle. Not an external tool.', real: ['Code-hash pinned stdio child process'], jarvisPaths: ['kernel/fixture-mcp.js']}),
   c({id: 'autheo-mcp', name: 'Autheo MCP', layer: 'tools', category: 'mcp', status: 'planned', repo: 'https://github.com/autheo-os/autheo-MCP', license: 'No license detected', owner: 'Autheo (ThothDivision/autheo-mcp redirects here)',
@@ -100,6 +100,9 @@ export const components = Object.freeze([
     note: 'Reference server (src/filesystem) for workspace-scoped file access. Appears in the planner as a proposal only.', planned: ['Project-scoped install proposal, explicit roots']}),
   c({id: 'github-mcp', name: 'GitHub MCP server', layer: 'tools', category: 'mcp', status: 'planned', repo: 'https://github.com/github/github-mcp-server', license: 'MIT', owner: 'GitHub',
     note: 'Official GitHub MCP server. Proposal only; no token is configured.', planned: ['Read-only repository scope first']}),
+  c({id: 'unified-cad-mcp', name: 'Unified CAD MCP (KiCad + FreeCAD + drone sizing)', layer: 'tools', category: 'mcp', status: 'planned', repo: 'https://github.com/SolutionsAsService/unified-CAD-MCP', license: 'No LICENSE file yet; backends MIT except design-mcp-server (none)', owner: 'SolutionsAsService (integration); blwfish, NiRuLabs upstreams',
+    note: 'Python stdio MCP server composing kicad_*, cad_*, pcb_* and freecad_* backends in isolated venvs, plus opt-in heuristic drone_* sizing calculators (73 default / 103 experimental tools, +3 drone). Installed on the operator host for OpenClaw; JARVIS has no adapter, grant or kernel path to it. Native KiCad was absent, so PCB work is unverified; freecad_execute_python is unrestricted code.',
+    planned: ['Kernel-owned stdio grant with schema-hash pinning, read-only drone_* and cad_* first', 'Drone design roadmap (docs/DRONE-DESIGN-PLAN.md upstream): airframe, aero, FEA, firmware params, SITL']}),
 
   // Models
   c({id: 'agentic-router', name: 'agentic-router', layer: 'models', category: 'router', status: 'planned', repo: 'https://github.com/SolutionsAsService/agentic-router', license: 'Apache-2.0 (current main; ELv2 at the earlier pinned revision)', owner: 'Workweave (upstream) / SolutionsAsService fork',
