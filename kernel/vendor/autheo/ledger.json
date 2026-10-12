@@ -1,0 +1,128 @@
+[
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/checkpoint.v1.schema.json",
+    "sha256": "114b4fca9a3999bc9fc45b80e5baf232e20655cd0729716ff5acf4f183d25130",
+    "localPath": "kernel/vendor/autheo/schemas/checkpoint.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/decision.v1.schema.json",
+    "sha256": "f0cde91b8c9873db90f300bf96a74658efeed8f84c33d97c1a4444eeb610a03a",
+    "localPath": "kernel/vendor/autheo/schemas/decision.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/handoff.v1.schema.json",
+    "sha256": "86d5068c45e5b8f08d0217ef74941cf8a230f9ef1e4510b314b184e25635d77c",
+    "localPath": "kernel/vendor/autheo/schemas/handoff.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/jws-claims.v1.schema.json",
+    "sha256": "41ee4a398ba3c4f982715aa98d6e03ad6e954fb66a74936449c4a117d24b86d0",
+    "localPath": "kernel/vendor/autheo/schemas/jws-claims.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/jws-header.v1.schema.json",
+    "sha256": "3a4c8e92981e0a11aee053999a9c4573bfdeebc179ecfb795534191671689705",
+    "localPath": "kernel/vendor/autheo/schemas/jws-header.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/ledger-entry.v1.schema.json",
+    "sha256": "364cb74d0c507f7ec2c010fe7f6b11c97117e1b03d6d238974e8cb786ccb3679",
+    "localPath": "kernel/vendor/autheo/schemas/ledger-entry.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/mandate.v1.schema.json",
+    "sha256": "2856de9dc1fa8a991b3fb919546f197a85bfe8b02c461f516ca900c59432e49a",
+    "localPath": "kernel/vendor/autheo/schemas/mandate.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/outcome.v1.schema.json",
+    "sha256": "3206bbcfa78225156e50a2e543130d84690cd57dd96c34e9af78426c7ecab43b",
+    "localPath": "kernel/vendor/autheo/schemas/outcome.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/passport.v1.schema.json",
+    "sha256": "440f795603484e72ea3b3a64a59ca3d768fb09f407eb7a4f5da23fdd99b6306c",
+    "localPath": "kernel/vendor/autheo/schemas/passport.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/policy.v1.schema.json",
+    "sha256": "57ccf47747dda4cbcfd87d21cab6aff5a0cac97874413744a1f3f4ff05e08753",
+    "localPath": "kernel/vendor/autheo/schemas/policy.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/receipt.v1.schema.json",
+    "sha256": "02b8d6ae1b1e7047050eaae72fd800e1841e0ed6d45ea96e9faacb81a120a561",
+    "localPath": "kernel/vendor/autheo/schemas/receipt.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "schemas/request.v1.schema.json",
+    "sha256": "8c22cc49213da5e90bf7192d8347b3186870b0c007232cac09d960ca940d8124",
+    "localPath": "kernel/vendor/autheo/schemas/request.v1.schema.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "LICENSE",
+    "sha256": "3244c1dcd26ffa05b7590b9438a30cb0b881346b3d138083efd6c9f99882a433",
+    "localPath": "kernel/vendor/autheo/LICENSE",
+    "license": "MIT",
+    "modifications": "Original unchanged; loaded by kernel/adapters/autheo-schema.js"
+  },
+  {
+    "repository": "https://github.com/SolutionsAsService/autheo-agent-environment",
+    "revision": "68bfb5550925efadd2fdfaafff5273f63475f219",
+    "originalPath": "tests/vectors/autheo-v1-vectors.json",
+    "sha256": "038970ad331cf6cc41dda671533cff1efc62d5ae1ee096380470be9cb3de712f",
+    "localPath": "test/fixtures/autheo-v1/autheo-v1-vectors.json",
+    "license": "MIT",
+    "modifications": "Original unchanged; test fixture"
+  }
+]

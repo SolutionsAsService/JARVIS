@@ -1,3 +1,29 @@
+## Autheo v1 alignment + adapter startup wiring — October 12, 2026 (local, Node 24.19.0, WSL2)
+
+- Target: autheo-agent-environment main 68bfb5550925efadd2fdfaafff5273f63475f219 (0.2.0). The v1 vector file was copied unchanged to test/fixtures/autheo-v1 (sha256 038970ad…e712f, asserted). The 12 v1 schemas and LICENSE are vendored unchanged in kernel/vendor/autheo, with a sha256 ledger.
+- npm test (includes build): **64 tests, 61 passed, 3 skipped, 0 failed.** New file test/autheo-v1.test.js (14 tests):
+  - all 11 canonical cases, all 14 documents (6 valid, 8 invalid with the expected spec error class, each checked with both PEM and JWK keys), the chain head, tampered-chain first_invalid_sequence 2, and the passport and policy digests;
+  - key seeds against raw/JWK/fingerprint kids, agent-signed request and outcome documents, and the JARVIS signer;
+  - schema validation, legacy-0.1 (8106edd) verification and explicit refusal, and v1 + 0.1 ledger output with outcome receipts;
+  - kernel outcome observer, startup env flags (off by default; Autheo, API and Paperclip wiring; config errors; no secrets in the summary) and /api/health + /api/trust;
+  - the Autheo API client against an in-process stand-in (pinned anchor, tampered receipt, wrong key, 401, unreachable, loopback-only URL).
+  The 3 skips are the Python cross-checks.
+- Python cross-check: `python3 -m venv --without-pip /tmp/autheo-venv-v1` + get-pip.py, then PyJWT 2.15.1 / pydantic 2.14.1 / PyYAML, with PYTHONPATH set to a git archive of 68bfb55. `JARVIS_AUTHEO_PYTHON=… JARVIS_AUTHEO_PYTHONPATH=… node --test test/autheo-v1.test.js test/autheo.test.js`: **22/22 passed**. This covers:
+  - upstream `vectors check` on the copied fixture;
+  - ReceiptBody.model_validate round-trips every JARVIS v1 body;
+  - the audit CLI verifies JARVIS v1 archives (local- kid via --kid), JARVIS 0.1-format archives and the 8106edd demo archive, and rejects tampering;
+  - a **live `python -m autheo_agent_environment serve`** driven by the JARVIS client: identity with an agent-held key, mandate grant, signed evaluate (allow, block for an ungranted tool, escalate above threshold), agent-signed outcome (reported_by agent_signed), ledger verify, and a CLI ledger export verified in JS against the pinned anchor with the matching head.
+- Upstream reference checks: `node interop/js/verify-vectors.mjs test/fixtures/autheo-v1/autheo-v1-vectors.json` → OK 46 checks. Upstream pytest at 68bfb55 in the same venv (plus pytest/jsonschema): **102 passed, 1 deselected**. The deselected test, tests/test_api.py::test_full_flow_allow_policy_deny_escalate_budget_and_outcome, failed here with a 5 s client socket TimeoutError in two runs, with no proxy set. This was not investigated further; it is an upstream test/environment issue, not JARVIS code.
+- npm run build: passed (56.9 kB JS / 29.8 kB CSS raw, 18.9 / 7.6 kB gzip).
+- Playwright (LD_LIBRARY_PATH=/tmp/pwlibs/root/usr/lib/x86_64-linux-gnu): **8/8 passed** (desktop + mobile).
+- CLI smoke: `JARVIS_AUTHEO_ENABLED=1 node kernel/http.js` logged the adapter summary. /api/health reported adapters.autheo=true, and after one task /api/trust showed 2 v1 receipts (simulation + outcome_report), verified.
+- **Not verified / limits:**
+  - the kernel does not gate effects on /v1/evaluate (the client exists, gatesKernel:false);
+  - the receipt ledger is in-memory, with an ephemeral key unless JARVIS_AUTHEO_PRIVATE_KEY_FILE is set;
+  - schema validation implements only the keywords the vendored schemas use;
+  - Paperclip is still mock-tested only;
+  - CI does not run the Python cross-check.
+
 ## Phase 1b AOS stack + adapters — October 12, 2026 (local, Node 24.19.0, WSL2)
 
 - npm ci: passed, 0 vulnerabilities reported at install time.
