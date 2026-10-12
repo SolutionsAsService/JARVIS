@@ -15,18 +15,25 @@
 // DADA design skill (kernel/adapters/dada.js): JARVIS_DADA_ENABLED=1 loads the pinned checkout fetched by
 //   `npm run upstream -- fetch dada` (or JARVIS_DADA_DIR), refuses it unless commit + contract match, and adds the
 //   design.dada task operation, which returns a design work packet (no inference, no DADA text copied).
+// gm-mcp server (kernel/adapters/gm-mcp.js): JARVIS_GM_MCP_ENABLED=1 loads the pinned checkout fetched by
+//   `npm run upstream -- fetch gm-mcp` (or JARVIS_GM_MCP_DIR), refuses it unless commit + bundle sha256 match the
+//   lock/contract, and adds the mcp.gm.codemode task operation: one kernel-owned stdio child per task, background
+//   self-update/HTTP/runner mechanisms switched off, schema-hash checked before the call. See that file for _* flags.
 import {readFileSync} from 'node:fs';
 import {AutheoReceiptLedger,trustOutcomeObserver} from './adapters/autheo.js';
 import {autheoApiConfigFromEnv,createAutheoClient} from './adapters/autheo-client.js';
 import {paperclipConfigFromEnv,createPaperclipClient,PaperclipGovernanceMirror} from './adapters/paperclip.js';
 import {dadaConfigFromEnv,loadDada,designPacket} from './adapters/dada.js';
+import {gmMcpConfigFromEnv,loadGmMcp,GM_MCP_OPERATION} from './adapters/gm-mcp.js';
 
 const repoFile=p=>new URL('../'+p,import.meta.url);
+// Lock entry + committed contract snapshot for one pinned upstream component (upstreams/lock.json).
+export function upstreamPin(id,readFile=readFileSync){const lock=JSON.parse(String(readFile(repoFile('upstreams/lock.json'),'utf8')));const e=lock.components.find(c=>c.id===id);if(!e)throw new Error('upstreams/lock.json has no '+id);return {entry:e,snapshot:e.contract?JSON.parse(String(readFile(repoFile(e.contract),'utf8'))):null};}
 export function dadaLock(readFile=readFileSync){const lock=JSON.parse(String(readFile(repoFile('upstreams/lock.json'),'utf8')));const e=lock.components.find(c=>c.id==='dada');return {entry:e,snapshot:JSON.parse(String(readFile(repoFile(e.contract),'utf8')))};}
 
 export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,root=process.cwd()}={}){
- const summary={autheo:{enabled:false},autheoApi:{enabled:false},paperclip:{enabled:false},dada:{enabled:false}};
- const observers=[],executors={};let trust=null,autheoApi=null,paperclip=null,dada=null;
+ const summary={autheo:{enabled:false},autheoApi:{enabled:false},paperclip:{enabled:false},dada:{enabled:false},gmMcp:{enabled:false}};
+ const observers=[],executors={};let trust=null,autheoApi=null,paperclip=null,dada=null,gmMcp=null;
  if(env.JARVIS_AUTHEO_ENABLED==='1'){
   const privateKey=env.JARVIS_AUTHEO_PRIVATE_KEY_FILE?String(readFile(env.JARVIS_AUTHEO_PRIVATE_KEY_FILE,'utf8')):undefined;
   trust=new AutheoReceiptLedger({issuer:env.JARVIS_AUTHEO_ISSUER||'jarvis-local-authority',environment:env.JARVIS_AUTHEO_ENVIRONMENT||'env:default',kid:env.JARVIS_AUTHEO_KID||undefined,privateKey,format:env.JARVIS_AUTHEO_FORMAT||'v1'});
@@ -45,5 +52,7 @@ export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,r
   executors['design.dada']=async({input})=>({executor:'dada-design-packet-v1',packet:designPacket(dada,{brief:input.text})});
   summary.dada={enabled:true,commit:dada.commit,skillSha256:dada.skillSha256,contract:dada.diff.identical?'identical':'compatible',operation:'design.dada',inference:false};
  }
- return {trust,observers,autheoApi,paperclip,dada,executors,summary};
+ const gm=gmMcpConfigFromEnv(env,{root,lock:env.JARVIS_GM_MCP_ENABLED==='1'?upstreamPin('gm-mcp',readFile).entry:undefined});
+ if(gm){gmMcp=loadGmMcp(gm,upstreamPin('gm-mcp',readFile).snapshot);executors[GM_MCP_OPERATION]=gmMcp.executor();summary.gmMcp=gmMcp.summary();}
+ return {trust,observers,autheoApi,paperclip,dada,gmMcp,executors,summary};
 }

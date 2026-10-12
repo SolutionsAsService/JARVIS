@@ -142,7 +142,7 @@ test('kernel HTTP exposes adapter flags in health and trust evidence at /api/tru
  const adapters=adaptersFromEnv({JARVIS_AUTHEO_ENABLED:'1'});const kernel=new Kernel({trust:adapters.trust,observers:adapters.observers});const token='test-only-token-long-enough-000';
  const server=createKernelServer({kernel,tokens:[{token,actor}],adapters});server.listen(0,'127.0.0.1');await once(server,'listening');const origin='http://127.0.0.1:'+server.address().port;
  const call=(path,body)=>fetch(origin+path,{method:body?'POST':'GET',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
- try{assert.deepEqual((await (await call('/api/health')).json()).adapters,{autheo:true,autheoApi:false,paperclip:false,dada:false});
+ try{assert.deepEqual((await (await call('/api/health')).json()).adapters,{autheo:true,autheoApi:false,paperclip:false,dada:false,gmMcp:false});
   await call('/api/tasks',{workspace:'default',idempotencyKey:'http-trust',text:'x'});await server.kernelIdle();await new Promise(r=>setImmediate(r));
   const trust=await (await call('/api/trust')).json();assert.equal(trust.autheo.verified,true);assert.equal(trust.autheo.count,2);assert.deepEqual(trust.autheo.formats,{v1:2});assert.equal(trust.autheo.anchor.kid,'demo-v1');assert.equal(trust.paperclip.enabled,false);
   assert.equal((await fetch(origin+'/api/trust')).status,401);
