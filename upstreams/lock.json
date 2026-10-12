@@ -31,6 +31,61 @@
      "python3 + chromium for tools/measure.py (optional)"
     ]
    }
+  },
+  {
+   "id": "gm-mcp",
+   "name": "gm-mcp",
+   "kind": "mcp-server",
+   "layer": "tools",
+   "repo": "https://github.com/SolutionsAsService/gm-mcp",
+   "upstream": "https://github.com/AnEntrypoint/gm-mcp",
+   "branch": "main",
+   "commit": "3848627ee58f870cfaeb77b485394fa30c7d02f5",
+   "pinnedAt": "2026-10-12",
+   "license": {
+    "spdx": null,
+    "finding": "no LICENSE file in fork or upstream AnEntrypoint/gm-mcp@3848627 (GitHub license: null; package.json declares \"MIT\")",
+    "reuse": "not cleared for redistribution; JARVIS launches the fetched checkout and copies nothing"
+   },
+   "policy": "pin-fetch-launch",
+   "contract": "upstreams/contracts/gm-mcp.json",
+   "entrypoints": {
+    "server": "bin/gm-mcp-server.js"
+   },
+   "runtime": {
+    "flag": "JARVIS_GM_MCP_ENABLED=1",
+    "requires": [
+     "node (same runtime as the kernel; the bundle has no dependencies)",
+     "an agentplug runner daemon only for gm verbs that dispatch through the spool (never started by JARVIS unless JARVIS_GM_MCP_ALLOW_RUNNER_SPAWN=1)"
+    ]
+   }
+  },
+  {
+   "id": "unified-cad-mcp",
+   "name": "Unified CAD MCP",
+   "kind": "mcp-server",
+   "layer": "tools",
+   "repo": "https://github.com/SolutionsAsService/unified-CAD-MCP",
+   "upstream": null,
+   "branch": "main",
+   "commit": "8fdd8508c6847f5c1fbbbd1670dafc23f5186c3c",
+   "pinnedAt": "2026-10-12",
+   "license": {
+    "spdx": null,
+    "finding": "no LICENSE file at 8fdd850; backends pinned in its own sources.lock.json (MIT except design-mcp-server: none)",
+    "reuse": "not cleared"
+   },
+   "policy": "pin-only",
+   "contract": null,
+   "entrypoints": {
+    "server": "src/unified_cad_mcp/server.py"
+   },
+   "runtime": {
+    "flag": null,
+    "requires": [
+     "installed separately on the operator host (python scripts/bootstrap_backends.py); JARVIS has no adapter yet"
+    ]
+   }
   }
  ]
 }

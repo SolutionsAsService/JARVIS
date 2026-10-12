@@ -1,0 +1,44 @@
+{
+ "schema": "jarvis.gm-mcp-contract/1",
+ "entry": "bin/gm-mcp-server.js",
+ "entrySha256": "daf0830e43e6f67df6067baba703a17953c775a8a1c9aefa64001733271e358b",
+ "bundleVersion": "0.2.39",
+ "package": {
+  "name": "gm-mcp",
+  "version": "0.2.39"
+ },
+ "server": {
+  "name": "gm-mcp",
+  "version": "0.2.39"
+ },
+ "lockdownSwitches": {
+  "GM_MCP_NO_HTTP_SINGLETON": true,
+  "GM_MCP_HTTP_SUPERVISOR": true,
+  "GM_MCP_SELF_UPDATE": true,
+  "GM_MCP_NO_SELF_UPDATE": true,
+  "GM_MCP_BUNDLE_DRIFT_RELOAD": true,
+  "GM_MCP_RELEASE_BRIDGE": true,
+  "GM_MCP_DEV_SYNC": true,
+  "GM_MCP_RUNNER_WATCHDOG": true,
+  "GM_MCP_DAEMON_RESPAWN": true,
+  "AGENTPLUG_NO_SELF_UPDATE": true
+ },
+ "requiredTools": [
+  "gm_codemode"
+ ],
+ "tools": [
+  {
+   "name": "gm_codemode",
+   "required": [
+    "code"
+   ],
+   "properties": [
+    "code",
+    "cwd",
+    "session_id"
+   ],
+   "inputSchemaSha256": "34888f29aa8cb354451fd8691b395875a9e1060a8415cd0b890c26fa9b4dd54f"
+  }
+ ],
+ "toolsSchemaHash": "d73e668f8419f1e329a5bc04263f7daec9f134c85d1ab0b7a847897ef479a435"
+}
