@@ -1,0 +1,109 @@
+{
+  "prototype": true,
+  "scope": "local simulations only; no real wallet or live runtime migration",
+  "decisions": [
+    "allow",
+    "escalate",
+    "block"
+  ],
+  "receipts": [
+    {
+      "sequence": 1,
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "request_id": "request:allow",
+      "payload_hash": "c6547a6413388eb0ca7731c0848556801e368fe973655edbc9c909db45def980",
+      "agent_id": "agent:research-01",
+      "mandate_id": "31011e9c-547a-431e-b71e-25180760dee8",
+      "kind": "simulation",
+      "decision": "allow",
+      "reasons": [
+        "within_demo_policy"
+      ],
+      "amount_minor": 40,
+      "executed": false,
+      "simulation_only": true,
+      "hash": "6f2a3c053d63107d4f601ad43392d15eef6e033180f96972b03a01663fe040a1"
+    },
+    {
+      "sequence": 2,
+      "previous_hash": "6f2a3c053d63107d4f601ad43392d15eef6e033180f96972b03a01663fe040a1",
+      "request_id": "request:escalate",
+      "payload_hash": "0e6be860a368eb1a14bb10aad641b9b60a52df8c840697e8b7d7df778d7e3a1d",
+      "agent_id": "agent:research-01",
+      "mandate_id": "31011e9c-547a-431e-b71e-25180760dee8",
+      "kind": "simulation",
+      "decision": "escalate",
+      "reasons": [
+        "human_review_required"
+      ],
+      "amount_minor": 51,
+      "executed": false,
+      "simulation_only": true,
+      "hash": "d0e0447149c2979067f43f84209c62915d5de53cdfb4a3e1e7a8e207c51eb041"
+    },
+    {
+      "sequence": 3,
+      "previous_hash": "d0e0447149c2979067f43f84209c62915d5de53cdfb4a3e1e7a8e207c51eb041",
+      "request_id": "request:block",
+      "payload_hash": "5e971214460d4971e623e357a28e072fc06c0a4a5efddd5982914a9065847373",
+      "agent_id": "agent:research-01",
+      "mandate_id": "31011e9c-547a-431e-b71e-25180760dee8",
+      "kind": "simulation",
+      "decision": "block",
+      "reasons": [
+        "per_action_limit",
+        "total_budget_limit"
+      ],
+      "amount_minor": 101,
+      "executed": false,
+      "simulation_only": true,
+      "hash": "6ef9a0dfeac24c807aa5b6116bcdade4a23e014ccf27bc9c5f175c8f595c324a"
+    }
+  ],
+  "handoff": {
+    "sequence": 1,
+    "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "request_id": "import:848a3129-24b5-487b-8186-9708e34785fd",
+    "payload_hash": "b62ea98e2bb6178167c5a5057c1c41c9f9e1e9aa21a9366df52c2d5513a68db3",
+    "agent_id": "agent:research-01",
+    "mandate_id": "31011e9c-547a-431e-b71e-25180760dee8",
+    "kind": "handoff_import",
+    "decision": "checkpoint_only",
+    "reasons": [
+      "fresh_destination_mandate_required",
+      "source_revocation_service_not_integrated"
+    ],
+    "amount_minor": 0,
+    "executed": false,
+    "simulation_only": true,
+    "checkpoint": {
+      "task_id": "task:inspect-supply",
+      "step": "awaiting_review",
+      "artifact_sha256": "46c0f23bb3f2166baac9dccc76fcbc67b3cbad901db0e9ca01992fbd742d2425"
+    },
+    "hash": "7ab27e9290e4a47cf2c3a9ed8a2fb3917e303504ea3e5629cf4eaccd16404308"
+  },
+  "source_audit": {
+    "head": "e9e52a5270ea9d509596ba553fe8a4cf279d981444881f9f7ef2a12b026ad8be",
+    "count": 4,
+    "tamper_evident": true,
+    "immutable": false,
+    "externally_anchored": false
+  },
+  "destination_audit": {
+    "head": "7ab27e9290e4a47cf2c3a9ed8a2fb3917e303504ea3e5629cf4eaccd16404308",
+    "count": 1,
+    "tamper_evident": true,
+    "immutable": false,
+    "externally_anchored": false
+  },
+  "snapshot_valid_seconds": 120,
+  "mcp_environment": {
+    "AUTHEO_AGENT_TRUST_SNAPSHOT": "/tmp/autheo-demo/trust-snapshot.jwt",
+    "AUTHEO_AGENT_TRUST_PUBLIC_KEY": "/tmp/autheo-demo/issuer-public.pem",
+    "AUTHEO_AGENT_TRUST_ISSUER": "autheo-demo-authority",
+    "AUTHEO_AGENT_TRUST_KEY_ID": "demo-v1",
+    "AUTHEO_AGENT_TRUST_SUBJECT": "agent:research-01",
+    "AUTHEO_AGENT_TRUST_ENVIRONMENT": "env:research"
+  }
+}

@@ -1,6 +1,23 @@
 # JARVIS codebase unification plan
 
-Status: **IMPLEMENTATION IN PROGRESS. Phase 0 frontend and Phase 1a bounded local kernel implemented; complete agent-core/codebase consolidation remains pending.** Updated 2026-10-07.
+Status: **IMPLEMENTATION IN PROGRESS. Phase 0 frontend, Phase 1a bounded local kernel and Phase 1b AOS stack map plus Paperclip/Autheo adapters implemented; complete agent-core/codebase consolidation remains pending.** Updated 2026-10-12.
+
+## AOS stack (agent operating stack)
+
+JARVIS collects the Autheo AOS in seven layers: **Interface → Kernel & routing → Agents & runtimes → Governance & trust → Tools & MCP → Models → Infrastructure & deploy.** The single source of truth is src/aos-stack.js (36 components; schema in schemas/aos-component.schema.json), rendered as the landing view and exported by kernel/catalog.js. Status is one of three words, and tests enforce the honesty rules:
+
+- **integrated**: code inside JARVIS that tests exercise (14: web workspace, kernel API, kernel scheduler/supervisor, skill router, baseline model router, JCP context, bounded-work policy, governance receipts, extracted OpenClaw matcher, MCP SDK client, owned fixture MCP, event ledger, CI, static container).
+- **adapter**: JARVIS code talking to a separately running system; off by default (2: Paperclip REST governance mirror, Autheo receipt format/verifier).
+- **planned**: not connected (20, including OpenClaw runtime, Freddie, gm, gm-mcp, agentplug, Autheo MCP, filesystem/GitHub MCP, Mem0, Letta, agentic-router, LiteLLM, hosted APIs, Ollama, OpenTelemetry, Langfuse, Shadw and DevHub).
+
+Three task paths are drawn on the map: the live digest task (runs today, all hops integrated or optional adapters), the owned MCP tool call (tested), and the future LLM task (every hop planned).
+
+### Phase 1b gates (this revision)
+
+- Paperclip: client and mirror written against the documented API at the pinned fork commit, verified with an in-process mock that enforces Paperclip's company scoping, 422 transitions and checkout rule. **Gate still open:** a live run against a real Paperclip server (pnpm dev, embedded PGlite), then company/project/goal mapping tables. Heartbeat dispatch stays disabled by default so Paperclip never becomes a second scheduler.
+- Autheo: receipt verification matches upstream signing.py/audit.py semantics and reproduces audit heads and payload hashes from the Python demo; the Python audit CLI accepts JARVIS-issued archives. **Gate still open:** a real identity authority and isolated mandate signer; the upstream project is itself a simulation-only prototype, and its working tree had uncommitted changes (a canonical-JSON v1 rework) during this revision, so the adapter targets the committed pin only.
+- Visualization: no external assets (Google Fonts removed, CSP tightened), keyboard-operable nodes and dialog, text alternatives for every drawn flow line, desktop and mobile E2E.
+
 
 ## Task contract and correction
 

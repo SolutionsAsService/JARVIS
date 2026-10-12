@@ -1,6 +1,6 @@
 {
   "name": "jarvis-assistant-stack",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "JARVIS consolidated local kernel with a deployable static preview and authenticated opt-in task frontend.",

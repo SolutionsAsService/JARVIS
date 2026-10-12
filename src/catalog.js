@@ -3,6 +3,8 @@ export const integrations = [
   { id: 'gm', name: 'gm', symbol: 'gm', role: 'Bounded development', description: 'Inspect, change, verify, finish. A workflow policy — not a second task orchestrator.', color: 'lime', state: 'Policy modeled', source: 'https://github.com/SolutionsAsService/gm' },
   { id: 'freddie', name: 'Freddie', symbol: 'ƒ', role: 'Plugin execution', description: 'An optional execution adapter with explicit ownership. Never a nested assistant loop.', color: 'purple', state: 'Adapter planned', source: 'https://github.com/SolutionsAsService/freddie' },
   { id: 'mcp', name: 'MCP', symbol: '⌘', role: 'Tools & resources', description: 'Reviewed servers, scoped permissions and explicit install plans. No silent setup.', color: 'blue', state: 'Planner only', source: 'https://modelcontextprotocol.io/' },
+  { id: 'paperclip', name: 'Paperclip', symbol: 'P', role: 'Governance system of record', description: 'Companies, agents, issues, approvals and heartbeats over its REST API. Kernel tasks mirror into issues; JARVIS stays the scheduler.', color: 'orange', state: 'Adapter · off by default', source: 'https://github.com/paperclipai/paperclip' },
+  { id: 'autheo', name: 'Autheo Agent Environment', symbol: 'A', role: 'Identity, mandates, receipts', description: 'Governance decisions become signed, hash-chained Ed25519 receipts in the Autheo format, verifiable in JS or by its Python CLI.', color: 'lime', state: 'Adapter · off by default', source: 'https://github.com/SolutionsAsService/autheo-agent-environment' },
 ];
 export const skills = [
   { id:'gm', name:'gm', vendor:'SolutionsAsService', category:'Development', capabilities:['repo.change','repo.verify'], description:'The canonical, bounded path from scoped change to verified result.', preferred:true },
@@ -19,8 +21,8 @@ export const servers = [
 ];
 export const milestones = [
   { stage:'00', title:'A single front door', status:'Available now', body:'Deployable frontend, local task simulation, capability conflict planning, configuration export.', done:true },
-  { stage:'01', title:'One owner. One task.', status:'Next', body:'Authenticated backend, durable task records, real process handles, deadlines, cancellation and approval gates.' },
-  { stage:'02', title:'Connect the engines', status:'Planned', body:'Version-pinned OpenClaw and Freddie adapters. gm stays policy; MCP stays tool transport.' },
+  { stage:'01', title:'One owner. One task.', status:'Local kernel shipped', done:true, body:'Authenticated backend, durable task records, real process handles, deadlines, cancellation and approval gates.' },
+  { stage:'02', title:'Connect the engines', status:'In progress', body:'Paperclip governance and Autheo trust adapters exist (off by default). OpenClaw agent core and Freddie services remain planned. gm stays policy; MCP stays tool transport.' },
   { stage:'03', title:'A clean capability registry', status:'Planned', body:'Import installed manifests, verify provenance, propose duplicates, confirm migrations and preserve rollback.' },
   { stage:'04', title:'Meet DevHub', status:'Contract needed', body:'Agree on identity, project/task schema and delivery acknowledgement. Then test a real end-to-end handoff.' },
 ];

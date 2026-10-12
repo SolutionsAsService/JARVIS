@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SolutionsAsService/JARVIS/schemas/aos-component.schema.json",
+  "title": "JARVIS AOS stack component",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "layer",
+    "category",
+    "status",
+    "repo",
+    "license",
+    "owner",
+    "note",
+    "real",
+    "planned",
+    "jarvisPaths",
+    "links"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,40}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 60
+    },
+    "layer": {
+      "enum": [
+        "interface",
+        "kernel",
+        "agents",
+        "governance",
+        "tools",
+        "models",
+        "infra"
+      ]
+    },
+    "category": {
+      "enum": [
+        "interface",
+        "kernel",
+        "router",
+        "memory",
+        "runtime",
+        "workflow",
+        "governance",
+        "trust",
+        "mcp",
+        "model",
+        "observability",
+        "deploy"
+      ]
+    },
+    "status": {
+      "enum": [
+        "integrated",
+        "adapter",
+        "planned"
+      ]
+    },
+    "repo": {
+      "type": "string",
+      "pattern": "^https://"
+    },
+    "license": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 80
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 2
+    },
+    "note": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 600
+    },
+    "real": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "planned": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "jarvisPaths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._/-]+$"
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

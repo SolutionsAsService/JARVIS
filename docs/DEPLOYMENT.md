@@ -37,7 +37,7 @@ Serves built static files only, not the repo or a privileged installer. Containe
 
 ## Production hardening
 
-Hosting proxy should enforce HTTPS and security headers. The bundled static server has a CSP permitting optional Google Fonts and no cross-origin API connections. Add explicit API origins only with a reviewed integration. Never add live Gateway tokens or privileged device pairing to this public preview.
+Hosting proxy should enforce HTTPS and security headers. The bundled static server's CSP allows only same-origin scripts, styles, fonts and connections. The UI makes no external asset or CDN requests (the E2E suite asserts this). Add explicit API origins only with a reviewed integration. Never add live Gateway tokens or privileged device pairing to this public preview.
 
 ## Local kernel (Phase 1a)
 

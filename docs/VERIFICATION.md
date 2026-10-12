@@ -1,3 +1,15 @@
+## Phase 1b AOS stack + adapters — October 12, 2026 (local, Node 24.19.0, WSL2)
+
+- npm ci: passed, 0 vulnerabilities reported at install time.
+- npm test (includes build): **50 tests, 49 passed, 1 skipped, 0 failed.** New: catalog schema/honesty (5), Paperclip adapter against an in-process mock REST server (5), Autheo verifier/ledger/kernel hook (7 + 1 optional), AOS stack UI handlers in JSDOM (1). The skipped test is the Python cross-check, which needs JARVIS_AUTHEO_PYTHON.
+- Python cross-check: JARVIS_AUTHEO_PYTHON=/tmp/autheo-venv/bin/python with JARVIS_AUTHEO_PYTHONPATH pointing at a git archive of autheo-agent-environment@8106edd. node --test test/autheo.test.js gave **8/8 passed**: the upstream audit CLI verified a JARVIS-issued archive, rejected a tampered one and agreed with the JS head for the demo archive. The venv was built with get-pip because system python3 has no pip/ensurepip; pip install -e '.[dev]' worked there. Upstream pytest at that tree: 36 passed.
+- npm run build: passed (about 56 kB JS + 30 kB CSS raw, 19 + 8 kB gzip).
+- Playwright E2E (local headless Chromium 1248, LD_LIBRARY_PATH=/tmp/pwlibs/root/usr/lib/x86_64-linux-gnu for extracted libnss3/libnspr4/libasound2): **8/8 passed** on desktop + mobile (iPhone 13 profile on Chromium). Includes the AOS drawer (open, linked navigation, Escape close), drawn flow lines, status filter, no horizontal overflow and **zero non-local network requests**.
+- Screenshots docs/aos-stack.png (1440 px, full page, digest path on) and docs/aos-stack-mobile.png (390 px) captured from the production build with scripts/capture-aos-stack.mjs, then inspected visually.
+- **Not verified:** a live Paperclip server (only the mock that follows its documented API); real identity/mandate issuance (the Autheo project is itself a simulation); GitHub Actions on this revision (see CI after push); Docker build; any hosted deployment.
+
+---
+
 ## Phase 1a implementation checkpoint — October 7, 2026
 
 - Parent took sole development ownership after the initial code checkpoint. Direct hardening added single-owner SQLite custody, live HTTP restart draining, actor-owned scheduling, persisted workflow/context routing, denial/duplicate-skill/budget checks and disconnect fencing.

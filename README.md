@@ -2,13 +2,36 @@
 
 # JARVIS
 
+## The AOS stack
+
+JARVIS is where the Autheo **agent operating stack (AOS)** is collected and consolidated. The landing view of the site is an interactive, layered map of that stack: every component is coloured **and labelled** by status, opens a detail drawer (repository, license, what is real vs planned, data flows), and three toggleable task paths draw how work moves through the layers.
+
+![AOS stack view](docs/aos-stack.png)
+
+| Layer | Integrated (runs in JARVIS, tested) | Adapter (off by default, external system runs separately) | Planned (not connected) |
+|---|---|---|---|
+| Interface | JARVIS web workspace, kernel HTTP API | | OpenClaw channels / Control UI |
+| Kernel & routing | Kernel scheduler + supervisor, skill router, baseline model router, JCP context manifests | | OpenClaw memory, Mem0, Letta |
+| Agents & runtimes | JARVIS bounded-work policy | **Paperclip** (REST governance mirror) | OpenClaw agent runtime, Freddie, gm, agentplug |
+| Governance & trust | JARVIS governance receipts/budgets, extracted OpenClaw policy matcher | **Autheo Agent Environment** (Ed25519 receipt format) | |
+| Tools & MCP | MCP TypeScript SDK client, owned fixture MCP server | | Autheo MCP, gm-mcp, MCP filesystem, GitHub MCP |
+| Models | | | agentic-router, LiteLLM, hosted model APIs, Ollama |
+| Infrastructure & deploy | Task event ledger, GitHub Actions CI, static container | | OpenTelemetry, Langfuse, Shadw, Autheo DevHub |
+
+The table is generated from one data file, [src/aos-stack.js](src/aos-stack.js) (schema: [schemas/aos-component.schema.json](schemas/aos-component.schema.json)), which the kernel also exports. Tests fail if an integrated or adapter entry points at code that does not exist, or if a planned entry claims real behaviour.
+
+- **Paperclip adapter** ([kernel/adapters/paperclip.js](kernel/adapters/paperclip.js)): a client for a separately running Paperclip server's documented REST API (health, companies, agents, issues, comments, approvals, heartbeat runs). It mirrors JARVIS kernel tasks into Paperclip issues and reads a governance snapshot. JARVIS stays the only scheduler: it never checks out issues, and heartbeat invocation is refused unless a caller opts in per call. Enable with JARVIS_PAPERCLIP_ENABLED=1, JARVIS_PAPERCLIP_URL and JARVIS_PAPERCLIP_COMPANY_ID. Tested against an in-process mock server, **not yet against a live Paperclip instance**.
+- **Autheo trust adapter** ([kernel/adapters/autheo.js](kernel/adapters/autheo.js)): maps governance outcomes to Autheo passport/mandate/allow-escalate-block vocabulary, signs receipts in the autheo-agent-environment Ed25519 JWS format and verifies hash-chained receipt archives in JS. Tests verify archives produced by the upstream Python demo. With JARVIS_AUTHEO_PYTHON set, the upstream Python audit CLI also verifies JARVIS-issued archives. The receipts record simulated decisions only (executed: false).
+
+The Paperclip monorepo and the Python prototype are **not vendored**. Pinned revisions are in [docs/SOURCES.md](docs/SOURCES.md).
+
 **One ubiquitous intelligent assistant — through codebase unification.** A SolutionsAsService project planning a single JARVIS monorepo/kernel that consolidates reusable OpenClaw and Freddie services, gm workflow policy, Paperclip governance, model routing and first-class MCP capabilities. The current release includes the Phase 0 frontend and a real Phase 1a bounded local kernel; the complete LLM agent-core/governance consolidation remains in progress.
 
 ## What ships today
 
 A deployable, responsive **frontend foundation**, not a completed assistant backend:
 
-- Six working views: overview, stack planner, sample skill registry, local task lab, architecture blueprint and workspace settings.
+- Six working views: the interactive AOS stack map (landing), stack planner, sample skill registry, local task lab, architecture blueprint and workspace settings.
 - Capability overlap detection and reversible canonical-skill selection.
 - Explicit MCP installation proposals and portable JSON plan export; **no software is installed**.
 - A locally executable task state machine demonstrating terminal completion, bounded retries and action-time deadline checks. **No agents or subprocesses execute in the task lab.**
@@ -36,11 +59,11 @@ Open the local URL printed by Vite. Build: npm run build. Serve output: npm run 
     npx playwright install chromium
     npm run test:browser
 
-E2E tests exercise desktop/mobile navigation, duplicate resolution, persistence, plan export and task completion. Running a build alone is not browser verification. Actual validation evidence belongs in [docs/VERIFICATION.md](docs/VERIFICATION.md).
+E2E tests exercise desktop/mobile navigation, the AOS stack drawer/flow lines/filters (and assert no external requests), duplicate resolution, persistence, plan export and task completion. Headless hosts without system Chromium libraries can point LD_LIBRARY_PATH at extracted libnss3/libnspr4/libasound2. Refresh the docs screenshots with npm run build and node scripts/capture-aos-stack.mjs. Running a build alone is not browser verification. Actual validation evidence belongs in [docs/VERIFICATION.md](docs/VERIFICATION.md).
 
 ## Safety and privacy
 
-No model keys, GitHub tokens, MCP secrets or Gateway credentials belong in this frontend. Settings are descriptive and are not contacted. Browser storage contains sample task titles and nonsecret configuration; avoid entering private work in a publicly shared browser. Exported plans contain no credentials. No telemetry. Google Fonts is the only external UI asset request; system fonts provide a fallback.
+No model keys, GitHub tokens, MCP secrets or Gateway credentials belong in this frontend. Settings are descriptive and are not contacted. Browser storage contains sample task titles and nonsecret configuration; avoid entering private work in a publicly shared browser. Exported plans contain no credentials. No telemetry and no external UI assets or CDNs: fonts fall back to the local system stack.
 
 The static preview does not scan/delete installed skills, run commands or modify Gateway configuration. The separately started local kernel exposes authenticated scoped APIs and executes bounded text hashing; its real MCP fixture runs only through explicitly configured programmatic tests, not automatic installation. External integrations require explicit authorization, and backend validation never trusts client-side checks.
 
