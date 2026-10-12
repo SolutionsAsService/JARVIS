@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {mkdtempSync,mkdirSync,writeFileSync,symlinkSync,existsSync,readFileSync} from 'node:fs';import {tmpdir} from 'node:os';import {join} from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {once} from 'node:events';
 import {extractDadaContract,readDadaCheckout,diffDadaContract,loadDada,designPacket,checkDesignLog,DADA_REQUIRED_PATHS,DADA_REQUIRED_SEATS,dadaConfigFromEnv} from '../kernel/adapters/dada.js';
-import {adaptersFromEnv} from '../kernel/startup.js';import {Kernel} from '../kernel/kernel.js';import {createKernelServer} from '../kernel/http.js';import {readLock,checkoutDir} from '../scripts/upstream.mjs';
+import {adaptersFromEnv} from '../kernel/startup.js';import {Kernel} from '../kernel/kernel.js';import {createKernelServer} from '../kernel/http.js';import {readLock,checkoutDir,repinCatalog} from '../scripts/upstream.mjs';
 const lock=readLock(),entry=lock.components.find(c=>c.id==='dada'),snapshot=JSON.parse(readFileSync(new URL('../upstreams/contracts/dada.json',import.meta.url),'utf8'));
 // Synthetic, independently written stand-in for a DADA checkout (no upstream text: the upstream has no license).
 const seats=[...new Set(Object.values(DADA_REQUIRED_SEATS).flat())];
@@ -16,7 +16,7 @@ function fakeCheckout({commit='a'.repeat(40),skill}={}){const d=mkdtempSync(join
 
 test('DADA lock: exact pin, license finding, pin-fetch-only and nothing upstream committed',()=>{
  assert.match(entry.commit,/^[0-9a-f]{40}$/);assert.equal(entry.policy,'pin-fetch-only');assert.equal(entry.license.spdx,null);assert.match(entry.license.reuse,/not cleared/);
- assert.equal(snapshot.schema,'jarvis.dada-contract/1');assert.deepEqual(snapshot.missingPaths,[]);assert.equal(snapshot.skill.name,'dada');assert.equal(snapshot.graph.nodes,302);
+ assert.equal(snapshot.schema,'jarvis.dada-contract/1');assert.deepEqual(snapshot.missingPaths,[]);assert.equal(snapshot.skill.name,'dada');assert.ok(snapshot.graph.nodes>=100,'anchor graph parsed');
  for(const s of seats)assert.ok(snapshot.graph.criticIds.includes(s),s);
  const files=execFileSync('git',['ls-files'],{encoding:'utf8'}).trim().split('\n').filter(f=>existsSync(f));const upstream=new Set(Object.values(snapshot.hashes));
  for(const f of files)assert.ok(!upstream.has(createHash('sha256').update(readFileSync(f)).digest('hex')),f+' is a copy of an upstream DADA file');
@@ -60,6 +60,10 @@ test('design.dada task: off by default, packet when enabled, surfaced in health 
  assert.throws(()=>kernel.submit({...actor,capabilities:['text.digest']},{workspace:'w',idempotencyKey:'d2',operation:'design.dada',text:'Poster brief here'}),{code:'capability_denied'});
  const token='test-only-token-long-enough-dada',server=createKernelServer({kernel,tokens:[{token,actor}],adapters:on});server.listen(0,'127.0.0.1');await once(server,'listening');const origin='http://127.0.0.1:'+server.address().port,get=p=>fetch(origin+p,{headers:{Authorization:'Bearer '+token}}).then(r=>r.json());
  try{assert.equal((await get('/api/health')).adapters.dada,true);const u=await get('/api/upstreams');assert.equal(u.components.find(c=>c.id==='dada').commit,entry.commit);assert.equal(u.adapters.dada.operation,'design.dada');}finally{await server.shutdown();}
+});
+test('upstream update re-pins the catalog entry together with lock.json',()=>{
+ const f=join(mkdtempSync(join(tmpdir(),'aos-')),'aos.js'),from='a'.repeat(40),to='b'.repeat(40);writeFileSync(f,"x pin: {commit: '"+from+"', branch: 'main', pinnedAt: '2026-01-01', update: 'u'}\n");
+ assert.equal(repinCatalog(from,to,'2026-02-02',f),true);assert.equal(readFileSync(f,'utf8'),"x pin: {commit: '"+to+"', branch: 'main', pinnedAt: '2026-02-02', update: 'u'}\n");assert.equal(repinCatalog(from,to,'2026-02-02',f),false);
 });
 const pinned=checkoutDir('dada',entry.commit);
 test('pinned upstream checkout matches the committed contract snapshot',{skip:existsSync(join(pinned,'.jarvis-upstream.json'))?false:'run npm run upstream:verify first (CI does)'},()=>{

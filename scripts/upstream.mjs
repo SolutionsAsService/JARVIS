@@ -37,6 +37,8 @@ export function fetchCommit(e,sha,{root=ROOT}={}){
  writeFileSync(marker,JSON.stringify({id:e.id,repo:e.repo,commit:sha,fetchedAt:new Date().toISOString(),policy:e.policy},null,1)+'\n');
  return dir;
 }
+// Keep the AOS catalog pin (src/aos-stack.js `pin:`) in step with lock.json; test/catalog.test.js enforces equality.
+export function repinCatalog(from,to,pinnedAt,file=join(ROOT,'src/aos-stack.js')){const src=readFileSync(file,'utf8');const re=new RegExp("pin: \\{commit: '"+from+"'(, branch: '[^']+', pinnedAt: ')[0-9-]+'");if(!re.test(src))return false;writeFileSync(file,src.replace(re,"pin: {commit: '"+to+"'$1"+pinnedAt+"'"));return true;}
 function contractOf(e,dir){const c=CONTRACTS[e.id];return c?c.read(dir):null;}
 function diffOf(e,snap,cur){return CONTRACTS[e.id].diff(snap,cur);}
 
@@ -58,7 +60,8 @@ async function main(argv){
    if(!d.compatible&&!flag('--accept-breaking')){console.error('Refusing to re-pin: breaking contract change. Review, adapt JARVIS, then re-run with --accept-breaking.');return 3;}
    const lic=lock.components.find(c=>c.id===id);lic.commit=head;lic.pinnedAt=new Date().toISOString().slice(0,10);
    writeFileSync(LOCK,JSON.stringify(lock,null,1)+'\n');if(cur)writeFileSync(snapPath(id),JSON.stringify(cur,null,1)+'\n');
-   console.error('Re-pinned '+id+' '+e.commit.slice(0,12)+' -> '+head.slice(0,12)+'. Update docs/SOURCES.md and run npm test.');
+   if(!repinCatalog(report.from,head,lic.pinnedAt))console.error('No catalog pin for '+id+' in src/aos-stack.js; add pin: {commit, branch, pinnedAt, update} to its component.');
+   console.error('Re-pinned '+id+' '+report.from.slice(0,12)+' -> '+head.slice(0,12)+'. Update docs/SOURCES.md and run npm test.');
   }
   return d.compatible?0:3;
  }
