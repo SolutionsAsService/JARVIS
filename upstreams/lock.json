@@ -1,0 +1,36 @@
+{
+ "schema": "jarvis.upstream-lock/1",
+ "note": "External components JARVIS tracks by exact commit. Fetched on demand into .jarvis/upstreams/<id>/<sha> (gitignored); nothing listed here is vendored unless policy says so. Update with: npm run upstream -- update <id>",
+ "components": [
+  {
+   "id": "dada",
+   "name": "DADA — Directed Ambition Design Agent",
+   "kind": "agent-skill",
+   "layer": "agents",
+   "repo": "https://github.com/SolutionsAsService/dada",
+   "upstream": "https://github.com/AnEntrypoint/dada",
+   "branch": "main",
+   "commit": "2c7d6048e89ce9f885a4a6dd1a4b98b8043ee12a",
+   "pinnedAt": "2026-10-12",
+   "license": {
+    "spdx": null,
+    "finding": "no LICENSE file in fork or upstream AnEntrypoint/dada@2c7d604 (GitHub license: null); all rights reserved by default",
+    "reuse": "not cleared"
+   },
+   "policy": "pin-fetch-only",
+   "contract": "upstreams/contracts/dada.json",
+   "entrypoints": {
+    "skill": "skills/dada/SKILL.md",
+    "graph": "skills/dada/references/anchor-graph.md",
+    "measure": "tools/measure.py"
+   },
+   "runtime": {
+    "flag": "JARVIS_DADA_ENABLED=1",
+    "requires": [
+     "an LLM agent to run the loop (not the JARVIS kernel)",
+     "python3 + chromium for tools/measure.py (optional)"
+    ]
+   }
+  }
+ ]
+}

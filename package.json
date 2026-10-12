@@ -14,7 +14,10 @@
     "start:static": "node server.mjs",
     "test:kernel": "node --test test/kernel*.test.js test/router*.test.js test/mcp*.test.js test/upstream*.test.js test/hardening.test.js",
     "pretest": "npm run build",
-    "pretest:kernel": "npm run build"
+    "pretest:kernel": "npm run build",
+    "upstream": "node scripts/upstream.mjs",
+    "upstream:check": "node scripts/upstream.mjs check",
+    "upstream:verify": "node scripts/upstream.mjs verify dada"
   },
   "engines": {
     "node": ">=24.15.0"
