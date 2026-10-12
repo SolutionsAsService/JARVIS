@@ -86,6 +86,46 @@
      "installed separately on the operator host (python scripts/bootstrap_backends.py); JARVIS has no adapter yet"
     ]
    }
+  },
+  {
+   "id": "last30days",
+   "name": "last30days research skill",
+   "kind": "agent-skill",
+   "layer": "agents",
+   "repo": "https://github.com/SolutionsAsService/last30days-skill",
+   "upstream": "https://github.com/mvanhorn/last30days-skill",
+   "branch": "main",
+   "commit": "50998cd1ba583f13a63b20e3fb5d906c71c31655",
+   "pinnedAt": "2026-10-12",
+   "license": {
+    "spdx": "MIT",
+    "finding": "MIT License (Copyright (c) 2026 Matt Van Horn) in LICENSE at 50998cd; SKILL.md frontmatter and mcp/manifest.json also declare MIT",
+    "reuse": "cleared (MIT; keep the copyright notice with any copied portion). JARVIS still copies nothing: it fetches the pinned checkout and runs it"
+   },
+   "policy": "pin-fetch-only",
+   "contract": "upstreams/contracts/last30days.json",
+   "fetch": {
+    "filter": "blob:none",
+    "sparse": [
+     "/*",
+     "!/media/",
+     "!/skills/last30days/assets/",
+     "!/README.*.md"
+    ]
+   },
+   "entrypoints": {
+    "skill": "skills/last30days/SKILL.md",
+    "engine": "skills/last30days/scripts/last30days.py",
+    "mcp": "mcp/cmd"
+   },
+   "runtime": {
+    "flag": "JARVIS_LAST30DAYS_ENABLED=1",
+    "requires": [
+     "python3.12+ (JARVIS_LAST30DAYS_PYTHON); standard library only for the keyless sources",
+     "network access to reddit, hacker news, polymarket and github for live runs (none with JARVIS_LAST30DAYS_MOCK=1)",
+     "optional Go MCP server in mcp/ is not built or launched by JARVIS"
+    ]
+   }
   }
  ]
 }

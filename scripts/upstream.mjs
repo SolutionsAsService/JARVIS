@@ -19,11 +19,12 @@ import {join,resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {readDadaCheckout,diffDadaContract} from '../kernel/adapters/dada.js';
 import {readGmMcpCheckout,diffGmMcpContract} from '../kernel/adapters/gm-mcp.js';
+import {readLast30Checkout,diffLast30Contract} from '../kernel/adapters/last30days.js';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const LOCK=join(ROOT,'upstreams/lock.json');
 const CATALOG=join(ROOT,'src/aos-stack.js');
-export const CONTRACTS={dada:{read:readDadaCheckout,diff:diffDadaContract},'gm-mcp':{read:readGmMcpCheckout,diff:diffGmMcpContract}};
+export const CONTRACTS={dada:{read:readDadaCheckout,diff:diffDadaContract},'gm-mcp':{read:readGmMcpCheckout,diff:diffGmMcpContract},last30days:{read:readLast30Checkout,diff:diffLast30Contract}};
 const git=(args,opts={})=>execFileSync('git',args,{encoding:'utf8',timeout:120000,stdio:['ignore','pipe','pipe'],...opts}).trim();
 export const readLock=(file=LOCK)=>JSON.parse(readFileSync(file,'utf8'));
 const entry=(lock,id)=>{const e=lock.components.find(c=>c.id===id);if(!e)throw new Error('unknown component '+id+' (known: '+lock.components.map(c=>c.id).join(', ')+')');return e;};
@@ -36,9 +37,14 @@ export function fetchCommit(e,sha,{root=ROOT}={}){
  const dir=checkoutDir(e.id,sha,root),marker=join(dir,'.jarvis-upstream.json');
  if(existsSync(marker)&&JSON.parse(readFileSync(marker,'utf8')).commit===sha&&git(['-C',dir,'rev-parse','HEAD'])===sha)return dir;
  rmSync(dir,{recursive:true,force:true});mkdirSync(dir,{recursive:true});
- git(['-C',dir,'init','-q']);git(['-C',dir,'remote','add','origin',e.repo]);git(['-C',dir,'fetch','-q','--depth','1','origin',sha]);git(['-C',dir,'checkout','-q','FETCH_HEAD']);
+ // lock entry `fetch` (optional): {filter:'blob:none', sparse:[non-cone patterns]} for repos too large to fetch whole
+ // (e.g. last30days: media and assets excluded). Blobs outside the sparse set are never downloaded.
+ const f=e.fetch??{};
+ git(['-C',dir,'init','-q']);git(['-C',dir,'remote','add','origin',e.repo]);
+ if(f.sparse?.length){git(['-C',dir,'config','core.sparseCheckout','true']);git(['-C',dir,'config','core.sparseCheckoutCone','false']);writeFileSync(join(dir,'.git/info/sparse-checkout'),f.sparse.join('\n')+'\n');}
+ git(['-C',dir,'fetch','-q','--depth','1',...(f.filter?['--filter='+f.filter]:[]),'origin',sha],{timeout:300000});git(['-C',dir,'checkout','-q','FETCH_HEAD'],{timeout:300000});
  const head=git(['-C',dir,'rev-parse','HEAD']);if(head!==sha)throw new Error('fetched '+head+' but wanted '+sha);
- writeFileSync(marker,JSON.stringify({id:e.id,repo:e.repo,commit:sha,fetchedAt:new Date().toISOString(),policy:e.policy},null,1)+'\n');
+ writeFileSync(marker,JSON.stringify({id:e.id,repo:e.repo,commit:sha,fetchedAt:new Date().toISOString(),policy:e.policy,...(e.fetch?{fetch:e.fetch}:{})},null,1)+'\n');
  return dir;
 }
 export async function contractOf(e,dir){const c=CONTRACTS[e.id];return c?await c.read(dir):null;}
