@@ -6,7 +6,8 @@
 - npm run build: passed (about 56 kB JS + 30 kB CSS raw, 19 + 8 kB gzip).
 - Playwright E2E (local headless Chromium 1248, LD_LIBRARY_PATH=/tmp/pwlibs/root/usr/lib/x86_64-linux-gnu for extracted libnss3/libnspr4/libasound2): **8/8 passed** on desktop + mobile (iPhone 13 profile on Chromium). Includes the AOS drawer (open, linked navigation, Escape close), drawn flow lines, status filter, no horizontal overflow and **zero non-local network requests**.
 - Screenshots docs/aos-stack.png (1440 px, full page, digest path on) and docs/aos-stack-mobile.png (390 px) captured from the production build with scripts/capture-aos-stack.mjs, then inspected visually.
-- **Not verified:** a live Paperclip server (only the mock that follows its documented API); real identity/mandate issuance (the Autheo project is itself a simulation); GitHub Actions on this revision (see CI after push); Docker build; any hosted deployment.
+- GitHub Actions run **38288545399** on e01295bb397bac242680221132578fc1a748b7ae: **completed / success** (npm ci, npm test, build, Chromium install, desktop + mobile E2E, artifact uploads). The Python cross-check is skipped in CI because no Autheo interpreter is configured there. https://github.com/SolutionsAsService/JARVIS/actions/runs/38288545399
+- **Not verified:** a live Paperclip server (only the mock that follows its documented API); real identity/mandate issuance (the Autheo project is itself a simulation); Docker build; any hosted deployment.
 
 ---
 
