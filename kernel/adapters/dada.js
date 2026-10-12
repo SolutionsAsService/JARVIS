@@ -96,7 +96,7 @@ export function loadDada({dir,commit,snapshot}){
  return {id:DADA_ID,commit,dir,skillPath,skillSha256:contract.hashes['skills/dada/SKILL.md'],contract,diff};
 }
 
-const MODE_RE=/\b(client|audience|users?|visitors?|customers?|public|approachab)/i;
+const MODE_RE=/\b(clients?|audiences?|users?|visitors?|customers?|developers?|readers?|public|approachab)/i;
 // Build a design work packet for an external agent to run DADA's loop. Pure; no network, no inference.
 export function designPacket(dada,{brief,mode,lite=false}){
  if(typeof brief!=='string'||brief.trim().length<10||brief.length>4000)throw Object.assign(new Error('Design brief must be 10-4000 characters'),{code:'input',status:400});

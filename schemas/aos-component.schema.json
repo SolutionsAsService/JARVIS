@@ -107,6 +107,17 @@
       "items": {
         "type": "string"
       }
+    },
+    "pin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "branch", "pinnedAt", "update"],
+      "properties": {
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "branch": {"type": "string", "minLength": 1},
+        "pinnedAt": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "update": {"type": "string", "minLength": 5}
+      }
     }
   }
 }

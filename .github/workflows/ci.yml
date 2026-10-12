@@ -17,6 +17,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # Fetch pinned external components and fail loudly if their contract drifted from upstreams/contracts.
+      - run: npm run upstream:verify
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps chromium
