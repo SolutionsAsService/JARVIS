@@ -19,21 +19,27 @@
 //   `npm run upstream -- fetch gm-mcp` (or JARVIS_GM_MCP_DIR), refuses it unless commit + bundle sha256 match the
 //   lock/contract, and adds the mcp.gm.codemode task operation: one kernel-owned stdio child per task, background
 //   self-update/HTTP/runner mechanisms switched off, schema-hash checked before the call. See that file for _* flags.
+// last30days research skill (kernel/adapters/last30days.js): JARVIS_LAST30DAYS_ENABLED=1 loads the pinned checkout
+//   fetched by `npm run upstream -- fetch last30days` (or JARVIS_LAST30DAYS_DIR), refuses it unless commit + contract
+//   + python3.12+ check out, and adds the research.last30days task operation: one kernel-owned engine child per task
+//   with keyless sources only, --no-browser-cookies, no API keys or user config. _PYTHON, _SOURCES, _DAYS,
+//   _MAX_RESULTS, _MOCK: see that file.
 import {readFileSync} from 'node:fs';
 import {AutheoReceiptLedger,trustOutcomeObserver} from './adapters/autheo.js';
 import {autheoApiConfigFromEnv,createAutheoClient} from './adapters/autheo-client.js';
 import {paperclipConfigFromEnv,createPaperclipClient,PaperclipGovernanceMirror} from './adapters/paperclip.js';
 import {dadaConfigFromEnv,loadDada,designPacket} from './adapters/dada.js';
 import {gmMcpConfigFromEnv,loadGmMcp,GM_MCP_OPERATION} from './adapters/gm-mcp.js';
+import {last30ConfigFromEnv,loadLast30,L30_OPERATION} from './adapters/last30days.js';
 
 const repoFile=p=>new URL('../'+p,import.meta.url);
 // Lock entry + committed contract snapshot for one pinned upstream component (upstreams/lock.json).
 export function upstreamPin(id,readFile=readFileSync){const lock=JSON.parse(String(readFile(repoFile('upstreams/lock.json'),'utf8')));const e=lock.components.find(c=>c.id===id);if(!e)throw new Error('upstreams/lock.json has no '+id);return {entry:e,snapshot:e.contract?JSON.parse(String(readFile(repoFile(e.contract),'utf8'))):null};}
 export function dadaLock(readFile=readFileSync){const lock=JSON.parse(String(readFile(repoFile('upstreams/lock.json'),'utf8')));const e=lock.components.find(c=>c.id==='dada');return {entry:e,snapshot:JSON.parse(String(readFile(repoFile(e.contract),'utf8')))};}
 
-export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,root=process.cwd()}={}){
- const summary={autheo:{enabled:false},autheoApi:{enabled:false},paperclip:{enabled:false},dada:{enabled:false},gmMcp:{enabled:false}};
- const observers=[],executors={};let trust=null,autheoApi=null,paperclip=null,dada=null,gmMcp=null;
+export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,root=process.cwd(),probePython}={}){
+ const summary={autheo:{enabled:false},autheoApi:{enabled:false},paperclip:{enabled:false},dada:{enabled:false},gmMcp:{enabled:false},last30days:{enabled:false}};
+ const observers=[],executors={};let trust=null,autheoApi=null,paperclip=null,dada=null,gmMcp=null,last30days=null;
  if(env.JARVIS_AUTHEO_ENABLED==='1'){
   const privateKey=env.JARVIS_AUTHEO_PRIVATE_KEY_FILE?String(readFile(env.JARVIS_AUTHEO_PRIVATE_KEY_FILE,'utf8')):undefined;
   trust=new AutheoReceiptLedger({issuer:env.JARVIS_AUTHEO_ISSUER||'jarvis-local-authority',environment:env.JARVIS_AUTHEO_ENVIRONMENT||'env:default',kid:env.JARVIS_AUTHEO_KID||undefined,privateKey,format:env.JARVIS_AUTHEO_FORMAT||'v1'});
@@ -54,5 +60,7 @@ export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,r
  }
  const gm=gmMcpConfigFromEnv(env,{root,lock:env.JARVIS_GM_MCP_ENABLED==='1'?upstreamPin('gm-mcp',readFile).entry:undefined});
  if(gm){gmMcp=loadGmMcp(gm,upstreamPin('gm-mcp',readFile).snapshot);executors[GM_MCP_OPERATION]=gmMcp.executor();summary.gmMcp=gmMcp.summary();}
- return {trust,observers,autheoApi,paperclip,dada,gmMcp,executors,summary};
+ const l30=last30ConfigFromEnv(env,{root,lock:env.JARVIS_LAST30DAYS_ENABLED==='1'?upstreamPin('last30days',readFile).entry:undefined});
+ if(l30){last30days=loadLast30(l30,upstreamPin('last30days',readFile).snapshot,probePython?{probePython}:{});executors[L30_OPERATION]=last30days.executor();summary.last30days=last30days.summary();}
+ return {trust,observers,autheoApi,paperclip,dada,gmMcp,last30days,executors,summary};
 }
