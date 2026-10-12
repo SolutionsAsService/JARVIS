@@ -4,10 +4,10 @@ Status: **IMPLEMENTATION IN PROGRESS. Phase 0 frontend, Phase 1a bounded local k
 
 ## AOS stack (agent operating stack)
 
-JARVIS collects the Autheo AOS in seven layers: **Interface → Kernel & routing → Agents & runtimes → Governance & trust → Tools & MCP → Models → Infrastructure & deploy.** The single source of truth is src/aos-stack.js (38 components; schema in schemas/aos-component.schema.json), rendered as the landing view and exported by kernel/catalog.js. Status is one of three words, and tests enforce the honesty rules:
+JARVIS collects the Autheo AOS in seven layers: **Interface → Kernel & routing → Agents & runtimes → Governance & trust → Tools & MCP → Models → Infrastructure & deploy.** The single source of truth is src/aos-stack.js (39 components; schema in schemas/aos-component.schema.json), rendered as the landing view and exported by kernel/catalog.js. Status is one of three words, and tests enforce the honesty rules:
 
 - **integrated**: code inside JARVIS that tests exercise (14: web workspace, kernel API, kernel scheduler/supervisor, skill router, baseline model router, JCP context, bounded-work policy, governance receipts, extracted OpenClaw matcher, MCP SDK client, owned fixture MCP, event ledger, CI, static container).
-- **adapter**: JARVIS code talking to a separately running system; off by default (4: Paperclip REST governance mirror, Autheo receipt format/verifier, DADA design skill pinned by commit with work packets, gm-mcp pinned MCP server launched as a kernel-owned stdio child).
+- **adapter**: JARVIS code talking to a separately running system; off by default (5: Paperclip REST governance mirror, Autheo receipt format/verifier, DADA design skill pinned by commit with work packets, gm-mcp pinned MCP server launched as a kernel-owned stdio child, last30days research engine pinned by commit and run as a kernel-owned child with keyless sources).
 - **planned**: not connected (20, including OpenClaw runtime, Freddie, gm, agentplug, Autheo MCP, unified CAD MCP, filesystem/GitHub MCP, Mem0, Letta, agentic-router, LiteLLM, hosted APIs, Ollama, OpenTelemetry, Langfuse, Shadw and DevHub).
 
 Three task paths are drawn on the map: the live digest task (runs today, all hops integrated or optional adapters), the owned MCP tool call (tested), and the future LLM task (every hop planned).
