@@ -85,6 +85,12 @@ export const components = Object.freeze([
     planned: ['Pass a host-generated --plan from an approved agent runtime and synthesise the brief', 'Evaluate the Go MCP server (mcp/) as a pinned launch target'],
     jarvisPaths: ['kernel/adapters/last30days.js', 'scripts/upstream.mjs', 'upstreams/lock.json', 'upstreams/contracts/last30days.json'], links: ['jarvis-kernel'],
     pin: {commit: '50998cd1ba583f13a63b20e3fb5d906c71c31655', branch: 'main', pinnedAt: '2026-10-12', update: 'npm run upstream -- update last30days'}}),
+  c({id: 'ponytail', name: 'Ponytail coding skill', layer: 'agents', category: 'workflow', status: 'adapter', repo: 'https://github.com/SolutionsAsService/ponytail', license: 'MIT', owner: 'Dietrich Gebert / DietrichGebert (upstream) / SolutionsAsService fork',
+    note: 'Lazy senior dev mode: an agent skill family (ponytail, -review, -audit, -debt, -gain, -help) that makes coding agents write the smallest complete change without cutting validation, error handling, security or tests. JARVIS pins a commit, fetches it on demand (sparse, without media), checks its contract and turns code.ponytail tasks into coding work packets naming the pinned skill file. Off by default (JARVIS_PONYTAIL_ENABLED=1); an LLM agent applies the skill, not the kernel.',
+    real: ['Commit pin + contract snapshot in upstreams/ (fails loudly if a skill, required path or the MIT license disappears)', 'Shared fetch/check/update tool with blobless sparse fetch: npm run upstream -- update ponytail', 'code.ponytail task operation behind JARVIS_PONYTAIL_ENABLED=1 routing to ponytail, -review, -audit or -debt'],
+    planned: ['Hand packets to an approved agent runtime and collect the diff'],
+    jarvisPaths: ['kernel/adapters/ponytail.js', 'scripts/upstream.mjs', 'upstreams/lock.json', 'upstreams/contracts/ponytail.json'], links: ['jarvis-kernel', 'bounded-work', 'gm'],
+    pin: {commit: '2961b52fc1fe6a5a87c7a959a79512e5c2f3ffe5', branch: 'main', pinnedAt: '2026-10-13', update: 'npm run upstream -- update ponytail --write --test'}}),
   c({id: 'agentplug', name: 'agentplug', layer: 'agents', category: 'workflow', status: 'planned', repo: 'https://github.com/AnEntrypoint/agentplug', license: 'No license detected', owner: 'AnEntrypoint',
     note: 'WASM plugin-routing runtime (one native runner hosting gm, libsql, bert, tree-sitter modules). No license file detected on GitHub, so reuse is not cleared.', planned: ['License clarification before any evaluation']}),
 

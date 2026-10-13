@@ -20,11 +20,12 @@ import {fileURLToPath} from 'node:url';
 import {readDadaCheckout,diffDadaContract} from '../kernel/adapters/dada.js';
 import {readGmMcpCheckout,diffGmMcpContract} from '../kernel/adapters/gm-mcp.js';
 import {readLast30Checkout,diffLast30Contract} from '../kernel/adapters/last30days.js';
+import {readPonytailCheckout,diffPonytailContract} from '../kernel/adapters/ponytail.js';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const LOCK=join(ROOT,'upstreams/lock.json');
 const CATALOG=join(ROOT,'src/aos-stack.js');
-export const CONTRACTS={dada:{read:readDadaCheckout,diff:diffDadaContract},'gm-mcp':{read:readGmMcpCheckout,diff:diffGmMcpContract},last30days:{read:readLast30Checkout,diff:diffLast30Contract}};
+export const CONTRACTS={dada:{read:readDadaCheckout,diff:diffDadaContract},'gm-mcp':{read:readGmMcpCheckout,diff:diffGmMcpContract},last30days:{read:readLast30Checkout,diff:diffLast30Contract},ponytail:{read:readPonytailCheckout,diff:diffPonytailContract}};
 const git=(args,opts={})=>execFileSync('git',args,{encoding:'utf8',timeout:120000,stdio:['ignore','pipe','pipe'],...opts}).trim();
 export const readLock=(file=LOCK)=>JSON.parse(readFileSync(file,'utf8'));
 const entry=(lock,id)=>{const e=lock.components.find(c=>c.id===id);if(!e)throw new Error('unknown component '+id+' (known: '+lock.components.map(c=>c.id).join(', ')+')');return e;};

@@ -126,6 +126,46 @@
      "optional Go MCP server in mcp/ is not built or launched by JARVIS"
     ]
    }
+  },
+  {
+   "id": "ponytail",
+   "name": "Ponytail — lazy senior dev mode",
+   "kind": "agent-skill",
+   "layer": "agents",
+   "repo": "https://github.com/SolutionsAsService/ponytail",
+   "upstream": "https://github.com/DietrichGebert/ponytail",
+   "branch": "main",
+   "commit": "2961b52fc1fe6a5a87c7a959a79512e5c2f3ffe5",
+   "pinnedAt": "2026-10-13",
+   "license": {
+    "spdx": "MIT",
+    "finding": "MIT License (Copyright (c) 2026 DietrichGebert) in LICENSE at 2961b52 (v5.2.0); package.json also declares MIT",
+    "reuse": "cleared (MIT; keep the copyright notice with any copied portion). JARVIS still copies nothing: it fetches the pinned checkout and points agents at it"
+   },
+   "policy": "pin-fetch-only",
+   "contract": "upstreams/contracts/ponytail.json",
+   "fetch": {
+    "filter": "blob:none",
+    "sparse": [
+     "/*",
+     "!/assets/",
+     "!/i18n/",
+     "!/benchmarks/"
+    ]
+   },
+   "entrypoints": {
+    "skill": "skills/ponytail/SKILL.md",
+    "review": "skills/ponytail-review/SKILL.md",
+    "audit": "skills/ponytail-audit/SKILL.md",
+    "debt": "skills/ponytail-debt/SKILL.md",
+    "openclaw": ".openclaw/skills/ponytail/SKILL.md"
+   },
+   "runtime": {
+    "flag": "JARVIS_PONYTAIL_ENABLED=1",
+    "requires": [
+     "an LLM agent runtime to apply the skill (not the JARVIS kernel)"
+    ]
+   }
   }
  ]
 }

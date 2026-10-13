@@ -24,6 +24,9 @@
 //   + python3.12+ check out, and adds the research.last30days task operation: one kernel-owned engine child per task
 //   with keyless sources only, --no-browser-cookies, no API keys or user config. _PYTHON, _SOURCES, _DAYS,
 //   _MAX_RESULTS, _MOCK: see that file.
+// Ponytail coding skill (kernel/adapters/ponytail.js): JARVIS_PONYTAIL_ENABLED=1 loads the pinned checkout fetched by
+//   `npm run upstream -- fetch ponytail` (or JARVIS_PONYTAIL_DIR), refuses it unless commit + contract match, and adds
+//   the code.ponytail task operation, which returns a coding work packet naming the pinned skill (no inference).
 import {readFileSync} from 'node:fs';
 import {AutheoReceiptLedger,trustOutcomeObserver} from './adapters/autheo.js';
 import {autheoApiConfigFromEnv,createAutheoClient} from './adapters/autheo-client.js';
@@ -31,6 +34,7 @@ import {paperclipConfigFromEnv,createPaperclipClient,PaperclipGovernanceMirror} 
 import {dadaConfigFromEnv,loadDada,designPacket} from './adapters/dada.js';
 import {gmMcpConfigFromEnv,loadGmMcp,GM_MCP_OPERATION} from './adapters/gm-mcp.js';
 import {last30ConfigFromEnv,loadLast30,L30_OPERATION} from './adapters/last30days.js';
+import {ponytailConfigFromEnv,loadPonytail,codingPacket,PONYTAIL_OPERATION} from './adapters/ponytail.js';
 
 const repoFile=p=>new URL('../'+p,import.meta.url);
 // Lock entry + committed contract snapshot for one pinned upstream component (upstreams/lock.json).
@@ -38,8 +42,8 @@ export function upstreamPin(id,readFile=readFileSync){const lock=JSON.parse(Stri
 export function dadaLock(readFile=readFileSync){const lock=JSON.parse(String(readFile(repoFile('upstreams/lock.json'),'utf8')));const e=lock.components.find(c=>c.id==='dada');return {entry:e,snapshot:JSON.parse(String(readFile(repoFile(e.contract),'utf8')))};}
 
 export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,root=process.cwd(),probePython}={}){
- const summary={autheo:{enabled:false},autheoApi:{enabled:false},paperclip:{enabled:false},dada:{enabled:false},gmMcp:{enabled:false},last30days:{enabled:false}};
- const observers=[],executors={};let trust=null,autheoApi=null,paperclip=null,dada=null,gmMcp=null,last30days=null;
+ const summary={autheo:{enabled:false},autheoApi:{enabled:false},paperclip:{enabled:false},dada:{enabled:false},gmMcp:{enabled:false},last30days:{enabled:false},ponytail:{enabled:false}};
+ const observers=[],executors={};let trust=null,autheoApi=null,paperclip=null,dada=null,gmMcp=null,last30days=null,ponytail=null;
  if(env.JARVIS_AUTHEO_ENABLED==='1'){
   const privateKey=env.JARVIS_AUTHEO_PRIVATE_KEY_FILE?String(readFile(env.JARVIS_AUTHEO_PRIVATE_KEY_FILE,'utf8')):undefined;
   trust=new AutheoReceiptLedger({issuer:env.JARVIS_AUTHEO_ISSUER||'jarvis-local-authority',environment:env.JARVIS_AUTHEO_ENVIRONMENT||'env:default',kid:env.JARVIS_AUTHEO_KID||undefined,privateKey,format:env.JARVIS_AUTHEO_FORMAT||'v1'});
@@ -62,5 +66,7 @@ export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,r
  if(gm){gmMcp=loadGmMcp(gm,upstreamPin('gm-mcp',readFile).snapshot);executors[GM_MCP_OPERATION]=gmMcp.executor();summary.gmMcp=gmMcp.summary();}
  const l30=last30ConfigFromEnv(env,{root,lock:env.JARVIS_LAST30DAYS_ENABLED==='1'?upstreamPin('last30days',readFile).entry:undefined});
  if(l30){last30days=loadLast30(l30,upstreamPin('last30days',readFile).snapshot,probePython?{probePython}:{});executors[L30_OPERATION]=last30days.executor();summary.last30days=last30days.summary();}
- return {trust,observers,autheoApi,paperclip,dada,gmMcp,last30days,executors,summary};
+ const pt=ponytailConfigFromEnv(env,{root,lock:env.JARVIS_PONYTAIL_ENABLED==='1'?upstreamPin('ponytail',readFile).entry:undefined});
+ if(pt){ponytail=loadPonytail({...pt,snapshot:upstreamPin('ponytail',readFile).snapshot});executors[PONYTAIL_OPERATION]=async({input})=>({executor:'ponytail-coding-packet-v1',packet:codingPacket(ponytail,{task:input.text})});summary.ponytail={enabled:true,commit:ponytail.commit,version:ponytail.version,contract:ponytail.diff.identical?'identical':'compatible',operation:PONYTAIL_OPERATION,inference:false};}
+ return {trust,observers,autheoApi,paperclip,dada,gmMcp,last30days,ponytail,executors,summary};
 }

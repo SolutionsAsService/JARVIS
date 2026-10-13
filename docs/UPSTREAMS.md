@@ -72,5 +72,8 @@ Registered today:
 - **gm-mcp**: MCP server, contract-checked by launching it (kernel/adapters/gm-mcp.js), policy `pin-fetch-launch`.
 - **last30days**: research agent skill + Python engine, MIT (reuse cleared), contract-checked statically
   (kernel/adapters/last30days.js), policy `pin-fetch-only`, blobless sparse fetch.
+- **ponytail**: coding agent skill family, MIT (reuse cleared), contract-checked statically
+  (kernel/adapters/ponytail.js), policy `pin-fetch-only`, blobless sparse fetch without /assets/, /i18n/, /benchmarks/.
+  Update: `npm run upstream -- update ponytail --write --test`.
 - **unified-cad-mcp**: MCP server, pin-only (no contract, no adapter); `check` reports upstream movement and
   `update unified-cad-mcp --write` moves the pin. Re-review its catalog note when you do.
