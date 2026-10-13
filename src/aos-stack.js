@@ -91,6 +91,12 @@ export const components = Object.freeze([
     planned: ['Hand packets to an approved agent runtime and collect the diff'],
     jarvisPaths: ['kernel/adapters/ponytail.js', 'scripts/upstream.mjs', 'upstreams/lock.json', 'upstreams/contracts/ponytail.json'], links: ['jarvis-kernel', 'bounded-work', 'gm'],
     pin: {commit: '2961b52fc1fe6a5a87c7a959a79512e5c2f3ffe5', branch: 'main', pinnedAt: '2026-10-13', update: 'npm run upstream -- update ponytail --write --test'}}),
+  c({id: 'jcodemunch', name: 'jCodeMunch MCP', layer: 'tools', category: 'mcp', status: 'adapter', repo: 'https://github.com/jgravelle/jcodemunch-mcp', license: 'Dual-use: free non-commercial, paid commercial licence', owner: 'J. Gravelle (jgravelle)',
+    note: 'Token-efficient code retrieval MCP server: tree-sitter index of a repo, then symbol search and exact symbol source instead of reading whole files (upstream benchmark: ~28x fewer tokens than grep-and-read). JARVIS pins the repo commit and PyPI version, the operator installs it with uv, and mcp.jcodemunch tasks launch the installed binary as a kernel-owned stdio child, refused unless its version equals the pin. Off by default (JARVIS_JCODEMUNCH_ENABLED=1). Commercial use needs a jCodeMunch licence.',
+    real: ['Commit + PyPI version pin in upstreams/lock.json', 'mcp.jcodemunch task operation with a tool grant list and version check before launch', 'Child env built from scratch (no JARVIS secrets)'],
+    planned: ['Contract snapshot of the full tool catalog (adaptive tiering hides most tools by default)'],
+    jarvisPaths: ['kernel/adapters/jcodemunch.js', 'upstreams/lock.json'], links: ['jarvis-kernel', 'ponytail', 'gm-mcp'],
+    pin: {commit: 'ce01c176a6ceeaa8553887e02f03e62a6532dd58', branch: 'main', pinnedAt: '2026-10-13', update: 'uv tool install --force jcodemunch-mcp==<new> and bump runtime.package.version in upstreams/lock.json'}}),
   c({id: 'agentplug', name: 'agentplug', layer: 'agents', category: 'workflow', status: 'planned', repo: 'https://github.com/AnEntrypoint/agentplug', license: 'No license detected', owner: 'AnEntrypoint',
     note: 'WASM plugin-routing runtime (one native runner hosting gm, libsql, bert, tree-sitter modules). No license file detected on GitHub, so reuse is not cleared.', planned: ['License clarification before any evaluation']}),
 

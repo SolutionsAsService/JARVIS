@@ -117,3 +117,11 @@ License: MIT in the fork and upstream at this revision (also declared in SKILL.m
 What Ponytail is: a prompt-level agent skill family for 20+ coding agents (Claude Code, Codex, OpenCode, Cursor, OpenClaw and others): the smallest complete change, plain replies, and never cutting validation, error handling, security or accessibility; review/audit/debt variants report without changing code. The JARVIS kernel has no inference, so it routes and pins the skill and an agent runtime applies it.
 
 License: MIT in the fork and upstream at this revision. Reuse is cleared; JARVIS still copies nothing and keeps the pin + fetch policy. Updates: `npm run upstream -- update ponytail --write --test` (see docs/UPSTREAMS.md).
+
+## Tools adapter: jCodeMunch MCP (2026-10-13)
+
+| Source | Revision | Inspected | Use in JARVIS |
+|---|---|---|---|
+| https://github.com/jgravelle/jcodemunch-mcp (PyPI jcodemunch-mcp) | main ce01c176a6ceeaa8553887e02f03e62a6532dd58; package 1.108.357 | LICENSE (jCodeMunch-MCP Dual-Use License v1.1, (c) J. Gravelle); README; live tools/list of the installed server (adaptive tier: route, menu, jcodemunch_guide, order, set_tool_tier, announce_model) | Catalog entry `jcodemunch` (adapter, off by default). Pinned in upstreams/lock.json (policy pin-only + runtime.package). kernel/adapters/jcodemunch.js launches the operator-installed binary for `mcp.jcodemunch` tasks after a version check. **Nothing copied.** |
+
+Licence: free for personal/academic/non-commercial use only; commercial use needs a paid licence from the author, and republishing to registries is not allowed. JARVIS keeps it off by default and records this in the lock and catalog.

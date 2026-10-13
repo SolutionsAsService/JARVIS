@@ -166,6 +166,39 @@
      "an LLM agent runtime to apply the skill (not the JARVIS kernel)"
     ]
    }
+  },
+  {
+   "id": "jcodemunch",
+   "name": "jCodeMunch MCP",
+   "kind": "mcp-server",
+   "layer": "tools",
+   "repo": "https://github.com/jgravelle/jcodemunch-mcp",
+   "branch": "main",
+   "commit": "ce01c176a6ceeaa8553887e02f03e62a6532dd58",
+   "pinnedAt": "2026-10-13",
+   "license": {
+    "spdx": null,
+    "finding": "LICENSE at ce01c17: 'jCodeMunch-MCP — Dual-Use License' v1.1, Copyright (c) 2024-2026 J. Gravelle. Free for personal/academic/research/non-commercial use; commercial use requires a paid licence; no republishing to package registries",
+    "reuse": "not cleared for copying or commercial use without a licence; JARVIS copies nothing and launches the operator-installed package"
+   },
+   "policy": "pin-only",
+   "contract": null,
+   "entrypoints": {
+    "server": "jcodemunch-mcp serve"
+   },
+   "runtime": {
+    "flag": "JARVIS_JCODEMUNCH_ENABLED=1",
+    "package": {
+     "registry": "pypi",
+     "name": "jcodemunch-mcp",
+     "version": "1.108.357",
+     "install": "uv tool install jcodemunch-mcp==1.108.357"
+    },
+    "requires": [
+     "the installed jcodemunch-mcp binary at the pinned version (python >= 3.10 via uv)",
+     "a commercial jCodeMunch licence for any commercial use"
+    ]
+   }
   }
  ]
 }
