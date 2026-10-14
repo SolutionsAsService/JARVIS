@@ -125,3 +125,15 @@ License: MIT in the fork and upstream at this revision. Reuse is cleared; JARVIS
 | https://github.com/jgravelle/jcodemunch-mcp (PyPI jcodemunch-mcp) | main ce01c176a6ceeaa8553887e02f03e62a6532dd58; package 1.108.357 | LICENSE (jCodeMunch-MCP Dual-Use License v1.1, (c) J. Gravelle); README; live tools/list of the installed server (adaptive tier: route, menu, jcodemunch_guide, order, set_tool_tier, announce_model) | Catalog entry `jcodemunch` (adapter, off by default). Pinned in upstreams/lock.json (policy pin-only + runtime.package). kernel/adapters/jcodemunch.js launches the operator-installed binary for `mcp.jcodemunch` tasks after a version check. **Nothing copied.** |
 
 Licence: free for personal/academic/non-commercial use only; commercial use needs a paid licence from the author, and republishing to registries is not allowed. JARVIS keeps it off by default and records this in the lock and catalog.
+
+## Tools adapter: Playwright MCP (2026-10-14)
+
+| Source | Revision | Inspected | Use in JARVIS |
+|---|---|---|---|
+| https://github.com/microsoft/playwright-mcp (npm @playwright/mcp) | tag v0.0.83 = f183dad4a52965583e3cc1d59b88cdc279e2e57d (release 2026-09-28; main was b8b4183 at inspection); package 0.0.83 (depends on playwright / playwright-core 1.64.0-alpha-1790635538000) | LICENSE (Apache-2.0, Microsoft); npm metadata (bin playwright-mcp, engines node >= 18); `playwright-mcp --help` and `--version` of the installed package; live tools/list (25 tools, including browser_run_code_unsafe and browser_evaluate); live navigate, snapshot and screenshot against a loopback page; an origin outside --allowed-origins returned net::ERR_BLOCKED_BY_CLIENT | Catalog entry `playwright-mcp` (adapter, off by default). Pinned in upstreams/lock.json (policy pin-only + runtime.package). kernel/adapters/playwright-mcp.js launches the operator-installed CLI for `mcp.playwright` tasks after a version check, with fixed lockdown flags. scripts/install-playwright-mcp.mjs installs the pinned package and browser into .jarvis/tools. **Nothing copied.** |
+
+Licence: Apache-2.0, so reuse is cleared with notice. JARVIS still copies nothing and launches the installed package.
+
+## Recommended MCP servers research (2026-10-14)
+
+Evidence for docs/RECOMMENDED-TOOLS.md came from the GitHub REST API (stars, pushed_at, latest release, LICENSE spdx) and from the npm and PyPI registries (latest version and date), all read on 2026-10-14. The new `planned` catalog entries (mcp-git, mcp-fetch, mcp-memory, mcp-sequential-thinking, context7, chrome-devtools-mcp) pin the candidate package versions in their notes: mcp-server-git / mcp-server-fetch 2026.10.10, @modelcontextprotocol/server-memory / server-sequential-thinking 1.0.0, @upstash/context7-mcp 4.4.1, chrome-devtools-mcp 1.10.1. Nothing was installed or connected for these.

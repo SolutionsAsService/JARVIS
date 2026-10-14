@@ -199,6 +199,40 @@
      "a commercial jCodeMunch licence for any commercial use"
     ]
    }
+  },
+  {
+   "id": "playwright-mcp",
+   "name": "Playwright MCP",
+   "kind": "mcp-server",
+   "layer": "tools",
+   "repo": "https://github.com/microsoft/playwright-mcp",
+   "branch": "main",
+   "commit": "f183dad4a52965583e3cc1d59b88cdc279e2e57d",
+   "pinnedAt": "2026-10-14",
+   "license": {
+    "spdx": "Apache-2.0",
+    "finding": "LICENSE at f183dad (tag v0.0.83): Apache License 2.0, Copyright (c) Microsoft Corporation; npm @playwright/mcp 0.0.83 declares Apache-2.0",
+    "reuse": "cleared under Apache-2.0 with notice; JARVIS still copies nothing and launches the operator-installed package"
+   },
+   "policy": "pin-only",
+   "contract": null,
+   "entrypoints": {
+    "server": "playwright-mcp --headless --isolated --browser chromium --output-dir <dir> --allowed-origins <origins>"
+   },
+   "runtime": {
+    "flag": "JARVIS_PLAYWRIGHT_MCP_ENABLED=1",
+    "package": {
+     "registry": "npm",
+     "name": "@playwright/mcp",
+     "version": "0.0.83",
+     "install": "npm run mcp:playwright:install"
+    },
+    "requires": [
+     "the installed @playwright/mcp CLI at the pinned version (Node >= 18; JARVIS uses Node 24)",
+     "a Playwright browser build (playwright-mcp install-browser chrome-for-testing) and its system libraries (libnss3, libnspr4, libasound2)",
+     "an origin allowlist (JARVIS_PLAYWRIGHT_MCP_ALLOWED_ORIGINS) or an explicit JARVIS_PLAYWRIGHT_MCP_ALLOW_ALL_ORIGINS=1"
+    ]
+   }
   }
  ]
 }

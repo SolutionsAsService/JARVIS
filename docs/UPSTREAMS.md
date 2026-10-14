@@ -75,5 +75,11 @@ Registered today:
 - **ponytail**: coding agent skill family, MIT (reuse cleared), contract-checked statically
   (kernel/adapters/ponytail.js), policy `pin-fetch-only`, blobless sparse fetch without /assets/, /i18n/, /benchmarks/.
   Update: `npm run upstream -- update ponytail --write --test`.
+- **jcodemunch**: MCP server, pin-only + PyPI package pin (runtime.package); the adapter refuses an installed version that differs.
+- **playwright-mcp**: MCP server (microsoft/playwright-mcp, Apache-2.0), pin-only at a release commit + npm package pin
+  (runtime.package). `npm run mcp:playwright:install` installs exactly that version (+ browser) into .jarvis/tools; the adapter
+  refuses any other version. Update: bump `runtime.package.version`, `commit` and `pinnedAt` to the new release tag (and the
+  catalog pin), re-run the install, `JARVIS_PLAYWRIGHT_MCP_BIN=... npm test`. `upstream:check` compares against main, so it
+  reports "update available" between releases too. Prefer tagged releases.
 - **unified-cad-mcp**: MCP server, pin-only (no contract, no adapter); `check` reports upstream movement and
   `update unified-cad-mcp --write` moves the pin. Re-review its catalog note when you do.

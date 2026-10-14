@@ -29,6 +29,9 @@
 //   the code.ponytail task operation, which returns a coding work packet naming the pinned skill (no inference).
 // jCodeMunch MCP (kernel/adapters/jcodemunch.js): JARVIS_JCODEMUNCH_ENABLED=1 launches the operator-installed
 //   jcodemunch-mcp (refused unless --version equals the lock pin) per mcp.jcodemunch call; dual-use licence.
+// Playwright MCP (kernel/adapters/playwright-mcp.js): JARVIS_PLAYWRIGHT_MCP_ENABLED=1 launches the operator-installed
+//   @playwright/mcp (npm run mcp:playwright:install; refused unless --version equals the lock pin) per mcp.playwright
+//   task: headless, isolated in-memory profile, dedicated output dir, origin allowlist required, granted tools only.
 import {readFileSync} from 'node:fs';
 import {AutheoReceiptLedger,trustOutcomeObserver} from './adapters/autheo.js';
 import {autheoApiConfigFromEnv,createAutheoClient} from './adapters/autheo-client.js';
@@ -38,15 +41,16 @@ import {gmMcpConfigFromEnv,loadGmMcp,GM_MCP_OPERATION} from './adapters/gm-mcp.j
 import {last30ConfigFromEnv,loadLast30,L30_OPERATION} from './adapters/last30days.js';
 import {ponytailConfigFromEnv,loadPonytail,codingPacket,PONYTAIL_OPERATION} from './adapters/ponytail.js';
 import {jcmConfigFromEnv,loadJcm,JCM_OPERATION} from './adapters/jcodemunch.js';
+import {pwmConfigFromEnv,loadPwm,PWM_OPERATION} from './adapters/playwright-mcp.js';
 
 const repoFile=p=>new URL('../'+p,import.meta.url);
 // Lock entry + committed contract snapshot for one pinned upstream component (upstreams/lock.json).
 export function upstreamPin(id,readFile=readFileSync){const lock=JSON.parse(String(readFile(repoFile('upstreams/lock.json'),'utf8')));const e=lock.components.find(c=>c.id===id);if(!e)throw new Error('upstreams/lock.json has no '+id);return {entry:e,snapshot:e.contract?JSON.parse(String(readFile(repoFile(e.contract),'utf8'))):null};}
 export function dadaLock(readFile=readFileSync){const lock=JSON.parse(String(readFile(repoFile('upstreams/lock.json'),'utf8')));const e=lock.components.find(c=>c.id==='dada');return {entry:e,snapshot:JSON.parse(String(readFile(repoFile(e.contract),'utf8')))};}
 
-export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,root=process.cwd(),probePython,jcmVersionOf}={}){
- const summary={autheo:{enabled:false},autheoApi:{enabled:false},paperclip:{enabled:false},dada:{enabled:false},gmMcp:{enabled:false},last30days:{enabled:false},ponytail:{enabled:false},jcodemunch:{enabled:false}};
- const observers=[],executors={};let trust=null,autheoApi=null,paperclip=null,dada=null,gmMcp=null,last30days=null,ponytail=null,jcodemunch=null;
+export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,root=process.cwd(),probePython,jcmVersionOf,pwmVersionOf}={}){
+ const summary={autheo:{enabled:false},autheoApi:{enabled:false},paperclip:{enabled:false},dada:{enabled:false},gmMcp:{enabled:false},last30days:{enabled:false},ponytail:{enabled:false},jcodemunch:{enabled:false},playwrightMcp:{enabled:false}};
+ const observers=[],executors={};let trust=null,autheoApi=null,paperclip=null,dada=null,gmMcp=null,last30days=null,ponytail=null,jcodemunch=null,playwrightMcp=null;
  if(env.JARVIS_AUTHEO_ENABLED==='1'){
   const privateKey=env.JARVIS_AUTHEO_PRIVATE_KEY_FILE?String(readFile(env.JARVIS_AUTHEO_PRIVATE_KEY_FILE,'utf8')):undefined;
   trust=new AutheoReceiptLedger({issuer:env.JARVIS_AUTHEO_ISSUER||'jarvis-local-authority',environment:env.JARVIS_AUTHEO_ENVIRONMENT||'env:default',kid:env.JARVIS_AUTHEO_KID||undefined,privateKey,format:env.JARVIS_AUTHEO_FORMAT||'v1'});
@@ -73,5 +77,7 @@ export function adaptersFromEnv(env=process.env,{readFile=readFileSync,fetcher,r
  if(pt){ponytail=loadPonytail({...pt,snapshot:upstreamPin('ponytail',readFile).snapshot});executors[PONYTAIL_OPERATION]=async({input})=>({executor:'ponytail-coding-packet-v1',packet:codingPacket(ponytail,{task:input.text})});summary.ponytail={enabled:true,commit:ponytail.commit,version:ponytail.version,contract:ponytail.diff.identical?'identical':'compatible',operation:PONYTAIL_OPERATION,inference:false};}
  const jc=jcmConfigFromEnv(env,{lock:env.JARVIS_JCODEMUNCH_ENABLED==='1'?upstreamPin('jcodemunch',readFile).entry:undefined});
  if(jc){jcodemunch=loadJcm(jc,jcmVersionOf?{versionOf:jcmVersionOf}:undefined);executors[JCM_OPERATION]=jcodemunch.executor();summary.jcodemunch=jcodemunch.summary();}
- return {trust,observers,autheoApi,paperclip,dada,gmMcp,last30days,ponytail,jcodemunch,executors,summary};
+ const pw=pwmConfigFromEnv(env,{root,lock:env.JARVIS_PLAYWRIGHT_MCP_ENABLED==='1'?upstreamPin('playwright-mcp',readFile).entry:undefined});
+ if(pw){playwrightMcp=loadPwm(pw,pwmVersionOf?{versionOf:pwmVersionOf}:undefined);executors[PWM_OPERATION]=playwrightMcp.executor();summary.playwrightMcp=playwrightMcp.summary();}
+ return {trust,observers,autheoApi,paperclip,dada,gmMcp,last30days,ponytail,jcodemunch,playwrightMcp,executors,summary};
 }

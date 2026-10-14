@@ -1,3 +1,19 @@
+## Playwright MCP adapter + recommended MCP servers — October 14, 2026 (local, Node 24.19.0, WSL2)
+
+- Target: microsoft/playwright-mcp v0.0.83 (f183dad), npm @playwright/mcp 0.0.83. It was installed both into ~/ai-stack/cache and through `npm run mcp:playwright:install -- --no-browser` (into .jarvis/tools, version check passed). The browser came from `playwright-mcp install-browser chrome-for-testing` (Chrome for Testing 155.0.8059.12, playwright chromium v1247, PLAYWRIGHT_BROWSERS_PATH under the operator cache). libnss3/libnspr4/libasound2 were extracted without root (`apt-get download` + `dpkg -x`) and passed through LD_LIBRARY_PATH.
+- npm test (includes build), with JARVIS_PLAYWRIGHT_MCP_BIN set: **95 tests, 91 passed, 4 skipped, 0 failed.** The skips are the Python Autheo cross-checks and jCodeMunch live, which need external interpreters/binaries. New file test/playwright-mcp.test.js (3 tests):
+  - the lock pin, Apache-2.0 and the install plan;
+  - off by default, required origin allowlist, unsafe-tool refusal, version-pin refusal, fixed launch flags (headless, isolated, no-webmcp; never unrestricted file access, extension, CDP, user-data-dir or secrets), the step bounds and the clean child env;
+  - **live:** discover (25 tools), an `mcp.playwright` kernel task that navigates and snapshots a loopback page (content returned, child cleanup confirmed), /api/health adapters.playwrightMcp=true, and a non-allowlisted loopback origin blocked with net::ERR_BLOCKED_BY_CLIENT.
+- Also checked by hand: a screenshot was written to the configured output dir.
+- npm run upstream:verify: all 7 pins identical, including playwright-mcp (pin-only).
+- npm run test:browser (Chromium 1248 for @playwright/test 1.64.0, same LD_LIBRARY_PATH): **8/8 passed**.
+- **Not verified / limits:**
+  - headed mode and the firefox/webkit/msedge builds were not run;
+  - the origin allowlist is upstream's request filter, not a sandbox, and redirects were not tested;
+  - the six new `planned` catalog entries (docs/RECOMMENDED-TOOLS.md) were researched only, not installed or run;
+  - docs/aos-stack.png was not refreshed for the new catalog entries.
+
 ## Autheo v1 alignment + adapter startup wiring — October 12, 2026 (local, Node 24.19.0, WSL2)
 
 - Target: autheo-agent-environment main 68bfb5550925efadd2fdfaafff5273f63475f219 (0.2.0). The v1 vector file was copied unchanged to test/fixtures/autheo-v1 (sha256 038970ad…e712f, asserted). The 12 v1 schemas and LICENSE are vendored unchanged in kernel/vendor/autheo, with a sha256 ledger.
